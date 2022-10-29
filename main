@@ -1,5 +1,16 @@
 import tkinter as tk
 
+
+
+coordinat_map_x = []
+coordinat_map_y = []
+x1=  []
+
+def apployment():
+    coordinat_map_x.append = x_label
+    coordinat_map_y.append = y.label
+
+
 class enter_koordinat(tk.Toplevel):
     def __init__(self, parent):
         super().__init__(parent)
@@ -8,17 +19,21 @@ class enter_koordinat(tk.Toplevel):
         self.x = tk.StringVar()
         self.x_label = tk.Label(self, text="Координата Х").place(x=30, y=50)
         self.y_label = tk.Label(self, text="Координата У").place(x=30, y=90)
-        entryx = tk.Entry(self, textvariable=self.x).place(x=130, y=50)
+        self.z_label = tk.Label(self, text= str(x1) ).place(x=30, y=150)
+        entry_x = tk.Entry(self, textvariable=self.x).place(x=130, y=50)
         self.y = tk.Entry(self).place(x=130, y=90)
-        self.quitButton_1 = tk.Button(self, text="Принять").place(x=130, y=130)
+        self.quitButton_1 = tk.Button(self, text="Принять", command=self.open).place(x=130, y=130)
         self.label = tk.Label(self, text="Введите координаты")
         self.button = tk.Button(self, text="Закрыть", command=self.destroy).place(x=420, y=300)
         self.label.pack(padx=20, pady=20)
         self.button.pack(pady=5, ipadx=2, ipady=2)
 
     def open(self):
-        self.grab_set()
 
+        self.grab_set()
+        x1.append ( self.x.get())
+        self.z_label = tk.Label(self, text=str(x1)).place(x=30, y=200)
+        return x1
 
 class Programm(tk.Tk):
     def __init__(self):
