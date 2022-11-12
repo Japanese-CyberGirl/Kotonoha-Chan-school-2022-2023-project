@@ -1,1 +1,75 @@
+from tkinter import *
 
+x_koor=[]
+y_koor=[]
+
+def teget():
+    global x
+    global x_label
+    x_label .destroy()
+    x_koor.append(x.get())
+    x_label  = Label(root, text=x_koor)
+    x_label .pack()
+    global y
+    global y_label
+    y_label .destroy()
+    y_koor.append(y.get())
+    y_label  = Label(root, text=y_koor)
+    y_label .pack()
+
+
+def koordinat_map(event):
+
+    children = Toplevel(root)
+    children.title("Координатная плоскость")
+    children.geometry("500x350")
+
+def enter_koordinat(event):
+
+    global x
+    global y
+    children = Toplevel(root)
+    children.title("Ввод координат")
+    children.geometry("500x350")
+
+    label1 = Label(children, text="Введите координаты")
+    label1.pack()
+
+    label2 = Label(children, text="Координата x")
+    label2.pack(side=LEFT)
+
+    x = Entry(children)
+    x.pack()
+
+    label3 = Label(children, text="Координата y")
+    label3.pack(side=LEFT)
+
+    y = Entry(children)
+    y.pack()
+    btn1 = Button(children, text="Принять", command=teget).place(x=250, y=130)
+    btn1.pack()
+    btn2 = Button(children, text="Закрыть", command=children.destroy).place(x=420, y=300)
+    btn2.pack()
+
+root = Tk()
+root.geometry("800x650")
+root.title("Основная программа")
+
+btn1 = Button(root, text="Ввод координат")
+btn1.bind('<Button-1>', enter_koordinat)
+btn1.pack()
+
+btn2 = Button(root, text="Координатная плоскость")
+btn2.bind('<Button-2>', koordinat_map)
+btn2.pack()
+
+global x_label
+x_label  = Label(root, text="x")
+x_label.pack()
+
+global y_label
+y_label  = Label(root, text="y")
+y_label.pack()
+quitButton = Button(root, text="Закрыть окно", command=quit)
+quitButton.place(x=700, y=600)
+root.mainloop()
