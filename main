@@ -1,53 +1,77 @@
-import tkinter as tk
+from tkinter import *
+
+x_koor=[]
+y_koor=[]
+
+
+def teget():
+    global x
+    global x_label
+    x_label .destroy()
+    x_koor.append(x.get())
+    x_label  = Label(root, text=x_koor)
+    x_label .pack()
+    global y
+    global y_label
+    y_label .destroy()
+    y_koor.append(y.get())
+    y_label  = Label(root, text=y_koor)
+    y_label .pack()
 
 
 
-coordinat_map_x = []
-coordinat_map_y = []
-x1=  []
+def enter_koordinat(event):
 
-def apployment():
-    coordinat_map_x.append = x_label
-    coordinat_map_y.append = y.label
+    global x
+    global y
+    children = Toplevel(root)
+    children.title("Ввод координат")
+    children.geometry("500x350")
 
+    label1 = Label(children, text="Введите координаты")
+    label1.pack()
 
-class enter_koordinat(tk.Toplevel):
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.geometry("500x350")
-        self.title("выбор координат")
-        self.x = tk.StringVar()
-        self.x_label = tk.Label(self, text="Координата Х").place(x=30, y=50)
-        self.y_label = tk.Label(self, text="Координата У").place(x=30, y=90)
-        self.z_label = tk.Label(self, text= str(x1) ).place(x=30, y=150)
-        entry_x = tk.Entry(self, textvariable=self.x).place(x=130, y=50)
-        self.y = tk.Entry(self).place(x=130, y=90)
-        self.quitButton_1 = tk.Button(self, text="Принять", command=self.open).place(x=130, y=130)
-        self.label = tk.Label(self, text="Введите координаты")
-        self.button = tk.Button(self, text="Закрыть", command=self.destroy).place(x=420, y=300)
-        self.label.pack(padx=20, pady=20)
-        self.button.pack(pady=5, ipadx=2, ipady=2)
+    label2 = Label(children, text="Координата x")
+    label2.pack()
 
-    def open(self):
+    x = Entry(children)
+    x.pack()
 
-        self.grab_set()
-        x1.append ( self.x.get())
-        self.z_label = tk.Label(self, text=str(x1)).place(x=30, y=200)
-        return x1
+    label3 = Label(children, text="Координата y")
+    label3.pack()
 
-class Programm(tk.Tk):
-    def __init__(self):
-        super().__init__()
-        self.geometry("800x650")
-        self.title("Основная программа")
-        self.btn = tk.Button(self, text="Ввод координат", command=self.open_window)
-        self.btn.pack(padx=50, pady=20)
-        self.quitButton = tk.Button(self, text="Закрыть окно", command=quit)
-        self.quitButton.place(x=700, y=600)
+    y = Entry(children)
+    y.pack()
+    btn1 = Button(children, text="Принять", command=teget).place(x=250, y=130)
+    btn1.pack()
+    btn2 = Button(children, text="Закрыть", command=children.destroy).place(x=420, y=300)
+    btn2.pack()
 
-    def open_window(self):
+root = Tk()
+root.geometry("800x650")
+root.title("Основная программа")
 
-        enter_koordinat(self).grab_set()
+canv = Canvas(root, width=1000, height = 1000, bg = "white") #создаем оси графика координатной плоскости
+canv.create_line(500,1000,500,0,width=2,arrow=LAST)
+canv.create_line(0,400,1000,400,width=2,arrow=LAST)
 
-if __name__ == "__main__":
-    Programm().mainloop()
+z_koor=[100]
+w_koor=[100]
+canv.create_oval(z_koor[0]+1,w_koor[0]-1,z_koor[0]+1,w_koor[0]-1, outline="black", fill="blue", width=2) #создание точки координат
+#canvas.create_oval(x_koor - 1, y_koor + 1, x_koor + 1, y_koor + 1, outline="red", fill="green", width=2)
+
+btn1 = Button(root, text="Ввод координат")
+btn1.bind('<Button-1>', enter_koordinat)
+btn1.pack()
+
+global x_label
+x_label  = Label(root, text="x")
+x_label.pack()
+
+global y_label
+y_label  = Label(root, text="y")
+y_label.pack()
+quitButton = Button(root, text="Закрыть окно", command=quit)
+quitButton.place(x=1000, y=0)
+canv.pack()
+root.mainloop()
