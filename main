@@ -1,9 +1,9 @@
 from tkinter import *
-
 x_koor = []
 y_koor = []
 counter = 0
 line_counter=0
+lineline_counter=0
 
 def teget():
     global x
@@ -15,7 +15,6 @@ def teget():
     global y_label
     global z_label
     y_koor.append(y.get())
-    global counter
     counter = counter + 1
     y_label = Label(root, text=y_koor).place(x=55, y=30)
     z_label = Label(root, text=counter).place(x=55, y=50)
@@ -31,25 +30,34 @@ def test_lining():
     global testline_label
     global tll
     while line_counter <= 2:
-        if line_counter == 2:
+        if line_counter == 2: #делаем на один меньше массива, в самом  массиве максимальное = 3
             canv.create_line(z_koor[line_counter] + 0.5, w_koor[line_counter] - 0.5, z_koor[0] + 0.5, w_koor[0] - 0.5)
             break
         else:
             canv.create_line(z_koor[line_counter] + 0.5, w_koor[line_counter] - 0.5, z_koor[int(line_counter)+1] + 0.5, w_koor[int(line_counter)+1] - 0.5)
             line_counter = line_counter + 1
 
-    tll = int (((z_koor[0]-z_koor[line_counter])*(z_koor[0]-z_koor[line_counter])) + ((w_koor[0]-w_koor[line_counter])*(w_koor[0]-w_koor[line_counter]))) 
+    tll = int (((z_koor[0]-z_koor[line_counter])*(z_koor[0]-z_koor[line_counter])) + ((w_koor[0]-w_koor[line_counter])*(w_koor[0]-w_koor[line_counter])))
     testline_label = Label(root,text=tll).place(x=155, y=580)
 
 
 def lining(): #функия нахождение длины линии и создание линейной последовательности линий между точками
+    global lineline_counter
+    global counter
     global lenline_label
     global tl
-    if counter>1:
-        canv.create_line(int(x_koor[0]) + 500 + 0.5, 400 - int(y_koor[0]) - 0.5,
-                         int(x_koor[1])+500 + 0.5, 400 - int(y_koor[1]) - 0.5)
-        tl = int(((int(x_koor[0]) - int(x_koor[1])) * (int(x_koor[0]) - int(x_koor[1]))) + ((int(y_koor[0]) - int(y_koor[1])) * (int(y_koor[0]) - int(y_koor[1]))))
-        lenline_label = Label(root, text=tl).place(x=155, y=600)
+    while lineline_counter <= counter-1:
+        if lineline_counter == counter-1:
+            canv.create_line(int(x_koor[int(lineline_counter)]) , int(y_koor[int(lineline_counter)]) , int(x_koor[0]) , int(y_koor[0]  ))
+            lineline_counter = lineline_counter + 1
+            break
+        else:
+            canv.create_line(int(x_koor[int(lineline_counter)]) ,  int(y_koor[int(lineline_counter)]) , int(x_koor[int(lineline_counter) + 1] ) ,  int(y_koor[int(lineline_counter) + 1]))
+            lineline_counter = lineline_counter + 1
+
+
+    tl = int(((int(x_koor[0]) - int(x_koor[1])) * (int(x_koor[0]) - int(x_koor[1]))) + ((int(y_koor[0]) - int(y_koor[1])) * (int(y_koor[0]) - int(y_koor[1]))))
+    lenline_label = Label(root, text=tl).place(x=155, y=600)
 
 
 def enter_koordinat():
