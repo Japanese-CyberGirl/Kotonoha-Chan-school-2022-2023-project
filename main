@@ -5,6 +5,7 @@ y_koor = []
 counter = 0
 line_counter = 0
 lineline_counter = 0
+tl = 0
 
 def teget():
     global x
@@ -49,13 +50,17 @@ def lining(): #функия нахождение длины линии и соз
     while lineline_counter <= counter-1:
         if lineline_counter == counter-1:
             canv.create_line(x_koor[lineline_counter] + 0.5, y_koor[lineline_counter] - 0.5, x_koor[0] + 0.5, y_koor[0] - 0.5)
+            tl = tl + ((x_koor[lineline_counter] + 0.5 - x_koor[0] + 0.5)*(x_koor[lineline_counter] + 0.5 - x_koor[0] + 0.5)) \
+                 + ((y_koor[lineline_counter] -0.5 - y_koor[0] - 0.5)*(y_koor[lineline_counter] -0.5 - y_koor[0] - 0.5))
             break
         else:
             canv.create_line(x_koor[lineline_counter] + 0.5, y_koor[lineline_counter] - 0.5, x_koor[lineline_counter + 1] + 0.5, y_koor[lineline_counter + 1] - 0.5)
+            tl = (tl + ((x_koor[lineline_counter] + 0.5 - x_koor[lineline_counter + 1] + 0.5)*(x_koor[lineline_counter] + 0.5 - x_koor[lineline_counter + 1] + 0.5))
+                      + ((y_koor[lineline_counter] - 0.5 - y_koor[lineline_counter + 1] - 0.5)*(y_koor[lineline_counter] - 0.5 - y_koor[lineline_counter + 1] - 0.5)))
             lineline_counter = lineline_counter + 1
 
 
-    tl = sqrt((x_koor[0] - x_koor[1]) * (x_koor[0] - x_koor[1]) + (y_koor[0] - y_koor[1]) * (y_koor[0] - y_koor[1]))
+
     lenline_label = Label(root, text=tl).place(x=155, y=600)
 
 
