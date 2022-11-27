@@ -3,71 +3,56 @@ from math import sqrt
 x_koor = []
 y_koor = []
 counter = 0
+points_counter = 0
 line_counter = 0
 lineline_counter = 0
 tl = 0
 
 def teget():
     global x
-    global x_label
+    global y
     global counter
     x_koor.append(int(x.get())+500)
-    x_label = Label(root, text = x_koor).place(x=55, y=10)
-    global y
-    global y_label
-    global z_label
     y_koor.append(400 - int(y.get()))
     counter = counter + 1
-    y_label = Label(root, text = y_koor).place(x=55, y=30)
-    z_label = Label(root, text = counter).place(x=55, y=50)
 
+    x_label.config(text=x_koor)
+    y_label.config(text=y_koor)
+    z_label.config(text=counter)
     if counter > 0:
         canv.create_oval(x_koor[counter - 1] + 1, y_koor[counter - 1] - 1, x_koor[counter - 1] + 1, y_koor[counter - 1] - 1,
                          outline="black", fill="blue", width=2)
-
-
-def test_lining():
-    global line_counter
-    global testline_label
-    global tll
-    while line_counter <= 2:
-        if line_counter == 2: #делаем на один меньше массива, в самом  массиве максимальное = 3
-            canv.create_line(z_koor[line_counter] + 0.5, w_koor[line_counter] - 0.5, z_koor[0] + 0.5, w_koor[0] - 0.5)
-            break
-        else:
-            canv.create_line(z_koor[line_counter] + 0.5, w_koor[line_counter] - 0.5, z_koor[line_counter+1] + 0.5, w_koor[line_counter+1] - 0.5)
-            line_counter = line_counter + 1
-
-    tll = sqrt (((z_koor[0]-z_koor[line_counter])*(z_koor[0]-z_koor[line_counter])) + ((w_koor[0]-w_koor[line_counter])*(w_koor[0]-w_koor[line_counter])))
-    testline_label = Label(root,text=tll).place(x=155, y=580)
+    line = canv.find_all()
+    line_label.config(text=line)
 
 
 def lining(): #функия нахождение длины линии и создание линейной последовательности линий между точками
     global lineline_counter
     global counter
-    global lenline_label
     global tl
-    while lineline_counter <= counter-1:
-        if lineline_counter == counter-1:
-            canv.create_line(x_koor[lineline_counter] + 0.5, y_koor[lineline_counter] - 0.5, x_koor[0] + 0.5, y_koor[0] - 0.5)
-            tl = tl + sqrt(((x_koor[lineline_counter] + 0.5 - x_koor[0] + 0.5)*(x_koor[lineline_counter] + 0.5 - x_koor[0] + 0.5)) \
-                 + ((y_koor[lineline_counter] -0.5 - y_koor[0] - 0.5)*(y_koor[lineline_counter] -0.5 - y_koor[0] - 0.5)))
-            break
-        else:
-            canv.create_line(x_koor[lineline_counter] + 0.5, y_koor[lineline_counter] - 0.5, x_koor[lineline_counter + 1] + 0.5, y_koor[lineline_counter + 1] - 0.5)
-            tl = sqrt((tl + ((x_koor[lineline_counter] + 0.5 - x_koor[lineline_counter + 1] + 0.5)*(x_koor[lineline_counter] + 0.5 - x_koor[lineline_counter + 1] + 0.5))
-                      + ((y_koor[lineline_counter] - 0.5 - y_koor[lineline_counter + 1] - 0.5)*(y_koor[lineline_counter] - 0.5 - y_koor[lineline_counter + 1] - 0.5))))
-            lineline_counter = lineline_counter + 1
+    global line
+    global points_counter
 
+    line = canv.find_all()
+    if len(line) > 2 + counter:
+        for i in range(2, len(line)):
+            canv.delete(line[i])
+        for points_counter in range(0, counter):
+            canv.create_oval(x_koor[points_counter] + 1, y_koor[points_counter] - 1, x_koor[points_counter] + 1, y_koor[points_counter] - 1,
+                             outline="black", fill="blue", width=2)
 
-
-    lenline_label = Label(root, text=tl).place(x=155, y=600)
-
+    for points_counter in range(0, counter-1):
+        canv.create_line(x_koor[points_counter], y_koor[points_counter], x_koor[points_counter+1], y_koor[points_counter+1])
+    canv.create_line(x_koor[counter-1], y_koor[counter-1], x_koor[0], y_koor[0])
+    line = canv.find_all()
+    lenline_label.config(text=tl)
+    line_label.config(text=line)
 
 def enter_koordinat():
     global x
     global y
     global counter
+
     children = Toplevel(root)
     children.title("Ввод координат")
     children.geometry("500x350")
@@ -98,17 +83,7 @@ root.title("Основная программа")
 canv = Canvas(root, width=1000, height=1000, bg="white")  # создаем оси графика координатной плоскости
 canv.create_line(500, 1000, 500, 0, width=2, arrow=LAST)
 canv.create_line(0, 400, 1000, 400, width=2, arrow=LAST)
-z_koor = [100, 150, 200, 50]
-w_koor = [100,50, 150, 50]
 
-canv.create_oval(z_koor[0] + 1, w_koor[0] - 1, z_koor[0] + 1, w_koor[0] - 1, outline="black", fill="blue",
-                 width=2)  # создание тестовой точки координат
-
-canv.create_oval(z_koor[1] + 1, w_koor[1] - 1, z_koor[1] + 1, w_koor[1] - 1, outline="black", fill="blue",
-                 width=2)  # создание второй тестовой точки координат
-
-canv.create_oval(z_koor[2] + 1, w_koor[2] - 1, z_koor[2] + 1, w_koor[2] - 1, outline="black", fill="blue",
-                 width=2) #создание третьей тестовой точки
 
 #canv.create_line(z_koor[0] + 0.5, w_koor[0] - 0.5, z_koor[1] + 0.5, w_koor[1] - 0.5)
 
@@ -117,22 +92,39 @@ canv.create_oval(z_koor[2] + 1, w_koor[2] - 1, z_koor[2] + 1, w_koor[2] - 1, out
 btn1 = Button(root, text="Ввод координат", command=enter_koordinat)
 btn1.pack()
 
-btn2 = Button(root, text="Тестовая Линия", command=test_lining).place(x=30, y=100)
+
 
 btn3 = Button(root, text="Линейное соединение массива", command=lining).place(x=30, y=130)
 
 
 
-global x_label
-x_label = Label(root, text="x").place(x=25, y=10)
-global y_label
-y_label = Label(root, text="y").place(x=25, y=30)
-global z_label
-z_label = Label(root, text="counter").place(x=5, y=50)
-global lenline_label
-lenline_label = Label(root, text="Длина линейной связи:").place(x=5, y=600)
-global testline_label
+Label(root, text="x").place(x=5, y=10)
+x_label = Label(root)
+x_label.place(x=55, y=10)
+x_label.config(text="")
+
+Label(root, text="y").place(x=5, y=30)
+y_label = Label(root)
+y_label.place(x=55, y=30)
+y_label.config(text="")
+
+Label(root, text="counter").place(x=5, y=50)
+z_label = Label(root)
+z_label.place(x=55, y=50)
+z_label.config(text="0")
+
+Label(root, text="Длина линейной связи:").place(x=5,y=600)
+lenline_label = Label(root)
+lenline_label.place(x=155, y=600)
+lenline_label.config(text=" ")
+
 testline_label = Label(root,text="Длина тестовой линии: ").place(x=5,y=580)
+
+Label(root,text="Количество элементов ").place(x=5,y=560)
+line_label = Label(root)
+line_label.place(x=155, y=560)
+line_label.config(text="0")
+
 
 quitButton = Button(root, text="Закрыть окно", command=quit)
 quitButton.place(x=1200, y=0)
