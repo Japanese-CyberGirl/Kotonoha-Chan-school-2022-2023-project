@@ -25,6 +25,27 @@ def teget():
     line = canv.find_all()
     line_label.config(text=line)
 
+def deleting(): #удаление значений массива, нарисованных линий, обнуление counter'a
+    global counter
+    global lineline_counter
+    global tl
+    global line
+    global x_koor
+    global y_koor
+    counter = 0
+    lineline_counter = 0
+    tl = 0
+    x_koor.clear()
+    y_koor.clear()
+    line = canv.find_all()
+    for i in range(2, len(line)):
+        canv.delete(line[i])
+
+    z_label.config(text="0")
+    y_label.config(text="")
+    x_label.config(text="")
+    lenline_label.config(text=" ")
+
 
 def lining(): #функия нахождение длины линии и создание линейной последовательности линий между точками
     global lineline_counter
@@ -41,9 +62,19 @@ def lining(): #функия нахождение длины линии и соз
             canv.create_oval(x_koor[points_counter] + 1, y_koor[points_counter] - 1, x_koor[points_counter] + 1, y_koor[points_counter] - 1,
                              outline="black", fill="blue", width=2)
 
+
     for points_counter in range(0, counter-1):
         canv.create_line(x_koor[points_counter], y_koor[points_counter], x_koor[points_counter+1], y_koor[points_counter+1])
-    canv.create_line(x_koor[counter-1], y_koor[counter-1], x_koor[0], y_koor[0])
+
+        tl =  tl + sqrt((x_koor[points_counter] - x_koor[points_counter+1]) * (x_koor[points_counter] - x_koor[points_counter+1]) +
+                    (y_koor[points_counter] - y_koor[points_counter+1]) * (y_koor[points_counter] - y_koor[points_counter+1]))
+    tl = tl + sqrt((x_koor[counter - 1] - x_koor[0]) * (x_koor[counter - 1] - x_koor[0]) +
+                   (y_koor[counter - 1] - y_koor[0]) * (y_koor[counter - 1] - y_koor[0]))
+    canv.create_line(x_koor[counter - 1], y_koor[counter - 1], x_koor[0], y_koor[0])
+
+
+
+
     line = canv.find_all()
     lenline_label.config(text=tl)
     line_label.config(text=line)
@@ -55,7 +86,7 @@ def enter_koordinat():
 
     children = Toplevel(root)
     children.title("Ввод координат")
-    children.geometry("500x350")
+    children.geometry("250x175")
 
     label1 = Label(children, text="Введите координаты")
     label1.pack()
@@ -70,10 +101,11 @@ def enter_koordinat():
     label3.pack()
 
     y = Entry(children)
-    y.pack()
-    btn1 = Button(children, text="Принять", command=teget).place(x=250, y=130)
 
-    btn2 = Button(children, text="Закрыть", command=children.destroy).place(x=420, y=300)
+
+    y.pack()
+    btn1 = Button(children, text="Принять", command=teget).place(x=95, y=110)
+    btn2 = Button(children, text="Закрыть", command=children.destroy).place(x=180, y=130)
 
 
 root = Tk()
@@ -92,7 +124,7 @@ canv.create_line(0, 400, 1000, 400, width=2, arrow=LAST)
 btn1 = Button(root, text="Ввод координат", command=enter_koordinat)
 btn1.pack()
 
-
+btn2 = Button(root, text="Очистить поле", command=deleting).place(x=30, y=510)
 
 btn3 = Button(root, text="Линейное соединение массива", command=lining).place(x=30, y=130)
 
