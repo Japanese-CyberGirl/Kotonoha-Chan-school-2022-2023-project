@@ -7,6 +7,7 @@ points_counter = 0
 line_counter = 0
 lineline_counter = 0
 tl = 0
+tln = 0
 
 def teget():
     global x
@@ -79,6 +80,37 @@ def lining(): #функия нахождение длины линии и соз
     lenline_label.config(text=tl)
     line_label.config(text=line)
 
+
+def nearest():
+    global binar
+    global tln
+    global counter
+    global counting
+    global cccounter
+    graph = []
+    min = -1
+    binar_counter = 0
+
+    global length_nearest
+    binar = []
+    for counting in len(counter):
+        binar[counting] = 0
+    binar[0] = 1
+
+    while 0 in binar:
+        for cccounter in len(binar):
+            if binar[cccounter] == 0:
+                graph[cccounter] = sqrt((x_koor[binar_counter] - x_koor[cccounter]) * (y_koor[binar_counter] - y_koor[cccounter]))
+    for i in len(graph):
+        if graph[i] < min:
+            min = graph[i]
+
+    tln = tln + min
+
+    # теперь тут нужно создать линию от x/y binar_counter до x/y индекса минимального значения массива graph
+
+    pass
+
 def enter_koordinat():
     global x
     global y
@@ -127,6 +159,8 @@ btn1.pack()
 btn2 = Button(root, text="Очистить поле", command=deleting).place(x=30, y=510)
 
 btn3 = Button(root, text="Линейное соединение массива", command=lining).place(x=30, y=130)
+
+btn4 = Button(root, text="Метод ближайшего соседа", command = nearest).place(x=30, y=165)
 
 
 
