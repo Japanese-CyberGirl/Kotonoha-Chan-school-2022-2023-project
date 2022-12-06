@@ -82,31 +82,30 @@ def lining(): #функия нахождение длины линии и соз
 
 
 def nearest():
-    global binar
+
     global tln
     global counter
-    global counting
-    global cccounter
     graph = []
-    min = -1
+    min = 1000000
     binar_counter = 0
-
     global length_nearest
     binar = []
-    for counting in len(counter):
-        binar[counting] = 0
+    for i in range(counter):
+        binar.append(0)
     binar[0] = 1
-
     while 0 in binar:
-        for cccounter in len(binar):
-            if binar[cccounter] == 0:
-                graph[cccounter] = sqrt((x_koor[binar_counter] - x_koor[cccounter]) * (y_koor[binar_counter] - y_koor[cccounter]))
-    for i in len(graph):
+        for i in range(len(binar)):
+            if binar[i] == 0:
+                graph.append(sqrt((x_koor[binar_counter] - x_koor[i])**2 + (y_koor[binar_counter] - y_koor[i])**2))
+                binar[i] = 1
+
+    for i in range(len(graph)):
         if graph[i] < min:
             min = graph[i]
 
     tln = tln + min
-
+    print(graph)
+    print(min)
     # теперь тут нужно создать линию от x/y binar_counter до x/y индекса минимального значения массива graph
 
     pass
