@@ -87,28 +87,35 @@ def nearest():
     global counter
     graph = []
     min = 1000000
+    min_point = 0
     binar_counter = 0
     global length_nearest
     binar = []
     for i in range(counter):
         binar.append(0)
     binar[0] = 1
+
     while 0 in binar:
-        for i in range(len(binar)):
+        for i in range(0, len(binar)):
             if binar[i] == 0:
                 graph.append(sqrt((x_koor[binar_counter] - x_koor[i])**2 + (y_koor[binar_counter] - y_koor[i])**2))
                 binar[i] = 1
 
-    for i in range(len(graph)):
-        if graph[i] < min:
-            min = graph[i]
 
-    tln = tln + min
+            for j in range(0, len(graph)):
+                if graph[j] < min:
+                    min = graph[j]
+                    min_point = j
+            graph.clear()
+
+            tln = tln + (sqrt((x_koor[binar_counter] - x_koor[min_point])**2 + (y_koor[binar_counter] - y_koor[min_point])**2))
+            binar_counter = min_point
+
     print(graph)
-    print(min)
+    print(tln)
     # теперь тут нужно создать линию от x/y binar_counter до x/y индекса минимального значения массива graph
 
-    pass
+
 
 def enter_koordinat():
     global x
