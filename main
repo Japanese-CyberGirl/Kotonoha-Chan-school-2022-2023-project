@@ -94,25 +94,34 @@ def nearest():
     for i in range(counter):
         binar.append(0)
     binar[0] = 1
+    print('бинар ', binar)
 
-    while 0 in binar:
+
+    for z in range(0,len(binar)):
         for i in range(0, len(binar)):
-            if binar[i] == 0:
                 graph.append(sqrt((x_koor[binar_counter] - x_koor[i])**2 + (y_koor[binar_counter] - y_koor[i])**2))
-                binar[i] = 1
 
-
-            for j in range(0, len(graph)):
-                if graph[j] < min:
-                    min = graph[j]
+        print('графы ', graph)
+        print('бинар ', binar)
+        for j in range(0, len(graph)):
+            if graph[j] < min:
+                if binar[j] == 0:
                     min_point = j
-            graph.clear()
+                    min = graph[j]
+        tln = tln + min
+        print('min = ', min)
+        print('min_point = ', min_point)
+        binar[min_point] = 1
+        print('длина ', tln)
 
-            tln = tln + (sqrt((x_koor[binar_counter] - x_koor[min_point])**2 + (y_koor[binar_counter] - y_koor[min_point])**2))
-            binar_counter = min_point
+        binar_counter = min_point
+        graph.clear()
+        min = 1000000
 
-    print(graph)
-    print(tln)
+    tln = tln + (sqrt((x_koor[binar_counter] - x_koor[0])**2 + (y_koor[binar_counter] - y_koor[0])**2))
+    tln = tln - 1000000
+    print('длина ', tln)
+
     # теперь тут нужно создать линию от x/y binar_counter до x/y индекса минимального значения массива graph
 
 
