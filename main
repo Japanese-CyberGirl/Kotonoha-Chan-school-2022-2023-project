@@ -54,7 +54,7 @@ def lining(): #функия нахождение длины линии и соз
     global tl
     global line
     global points_counter
-
+    tl = 0
     line = canv.find_all()
     if len(line) > 2 + counter:
         for i in range(2, len(line)):
@@ -83,7 +83,9 @@ def lining(): #функия нахождение длины линии и соз
 
 def nearest():
 
+    global line
     global tln
+    tln = 0
     global counter
     graph = []
     min = 1000000
@@ -96,6 +98,13 @@ def nearest():
     binar[0] = 1
     print('бинар ', binar)
 
+    line = canv.find_all()
+    if len(line) > 2 + counter:
+        for i in range(2, len(line)):
+            canv.delete(line[i])
+        for points_counter in range(0, counter):
+            canv.create_oval(x_koor[points_counter] + 1, y_koor[points_counter] - 1, x_koor[points_counter] + 1, y_koor[points_counter] - 1,
+                             outline="black", fill="blue", width=2)
 
     for z in range(0,len(binar)):
         for i in range(0, len(binar)):
@@ -109,6 +118,7 @@ def nearest():
                     min_point = j
                     min = graph[j]
         tln = tln + min
+        canv.create_line(x_koor[min_point], y_koor[min_point], x_koor[binar_counter], y_koor[binar_counter], fill='red', width=1)
         print('min = ', min)
         print('min_point = ', min_point)
         binar[min_point] = 1
@@ -119,10 +129,11 @@ def nearest():
         min = 1000000
 
     tln = tln + (sqrt((x_koor[binar_counter] - x_koor[0])**2 + (y_koor[binar_counter] - y_koor[0])**2))
+    canv.create_line((x_koor[0], y_koor[0], x_koor[binar_counter], y_koor[binar_counter]), fill='red', width=1)
     tln = tln - 1000000
     print('длина ', tln)
 
-    # теперь тут нужно создать линию от x/y binar_counter до x/y индекса минимального значения массива graph
+    line = canv.find_all()
 
 
 
