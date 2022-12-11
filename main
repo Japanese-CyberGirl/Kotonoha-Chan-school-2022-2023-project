@@ -134,7 +134,8 @@ def nearest():
     print('длина ', tln)
 
     line = canv.find_all()
-
+    testline_label.config(text=tln)
+    line_label.config(text=line)
 
 
 def enter_koordinat():
@@ -210,7 +211,10 @@ lenline_label = Label(root)
 lenline_label.place(x=155, y=600)
 lenline_label.config(text=" ")
 
-testline_label = Label(root,text="Длина тестовой линии: ").place(x=5,y=580)
+testline_label = Label(root,text="Длина при методе ближайшего соседа: ").place(x=5,y=580)
+testline_label = Label(root)
+testline_label.place(x=240, y=580)
+testline_label.config(text=" ")
 
 Label(root,text="Количество элементов ").place(x=5,y=560)
 line_label = Label(root)
