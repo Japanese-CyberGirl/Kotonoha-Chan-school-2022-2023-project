@@ -105,20 +105,21 @@ def nearest():
         for points_counter in range(0, counter):
             canv.create_oval(x_koor[points_counter] + 1, y_koor[points_counter] - 1, x_koor[points_counter] + 1, y_koor[points_counter] - 1,
                              outline="black", fill="blue", width=2)
-
+    min = 1000000
     for z in range(0,len(binar)):
         for i in range(0, len(binar)):
                 graph.append(sqrt((x_koor[binar_counter] - x_koor[i])**2 + (y_koor[binar_counter] - y_koor[i])**2))
 
         print('графы ', graph)
         print('бинар ', binar)
+
         for j in range(0, len(graph)):
-            if graph[j] < min:
+            if int(graph[j]) < min:
                 if binar[j] == 0:
                     min_point = j
                     min = graph[j]
         tln = tln + min
-        canv.create_line(x_koor[min_point], y_koor[min_point], x_koor[binar_counter], y_koor[binar_counter], fill='red', width=1)
+        canv.create_line(x_koor[min_point], y_koor[min_point], x_koor[binar_counter], y_koor[binar_counter])
         print('min = ', min)
         print('min_point = ', min_point)
         binar[min_point] = 1
@@ -126,16 +127,32 @@ def nearest():
 
         binar_counter = min_point
         graph.clear()
-        min = 1000000
+
 
     tln = tln + (sqrt((x_koor[binar_counter] - x_koor[0])**2 + (y_koor[binar_counter] - y_koor[0])**2))
     canv.create_line((x_koor[0], y_koor[0], x_koor[binar_counter], y_koor[binar_counter]), fill='red', width=1)
-    tln = tln - 1000000
+
     print('длина ', tln)
 
     line = canv.find_all()
-    testline_label.config(text=tln)
-    line_label.config(text=line)
+
+
+def branch_and_bound():
+    global counter
+    branch_value = []
+    branch = [0] * counter
+    for i in range(counter):
+        branch[i] = [0] * counter
+    #branch[1][1]=5
+    for a in range(counter):
+        for b in range(counter):
+            branch[a][b] = sqrt((x_koor[a] - x_koor[b])**2 + (y_koor[a] - y_koor[b])**2)
+
+    print(branch)
+
+
+
+    print(branch)
 
 
 def enter_koordinat():
@@ -163,7 +180,8 @@ def enter_koordinat():
 
 
     y.pack()
-    btn1 = Button(children, text="Принять", command=teget).place(x=95, y=110)
+    btn1 = Button(children, text="Принять", command=teget)
+    btn1.place(x=95, y=110)
     btn2 = Button(children, text="Закрыть", command=children.destroy).place(x=180, y=130)
 
 
@@ -189,6 +207,8 @@ btn3 = Button(root, text="Линейное соединение массива",
 
 btn4 = Button(root, text="Метод ближайшего соседа", command = nearest).place(x=30, y=165)
 
+btn5 = Button(root, text="Метод ветвей и границ", command = branch_and_bound).place(x=30, y=200)
+
 
 
 Label(root, text="x").place(x=5, y=10)
@@ -211,10 +231,7 @@ lenline_label = Label(root)
 lenline_label.place(x=155, y=600)
 lenline_label.config(text=" ")
 
-testline_label = Label(root,text="Длина при методе ближайшего соседа: ").place(x=5,y=580)
-testline_label = Label(root)
-testline_label.place(x=240, y=580)
-testline_label.config(text=" ")
+testline_label = Label(root,text="Длина тестовой линии: ").place(x=5,y=580)
 
 Label(root,text="Количество элементов ").place(x=5,y=560)
 line_label = Label(root)
