@@ -139,6 +139,8 @@ def nearest():
 
     line = canv.find_all()
 
+    testline_label.config(text=tln)
+
 def branch_and_bound():
     global counter
     branch_value = []
@@ -226,10 +228,13 @@ z_label.config(text="0")
 
 Label(root, text="Длина линейной связи:").place(x=5,y=600)
 lenline_label = Label(root)
-lenline_label.place(x=155, y=600)
+lenline_label.place(x=215, y=600)
 lenline_label.config(text=" ")
 
-testline_label = Label(root,text="Длина тестовой линии: ").place(x=5,y=580)
+testline_label = Label(root,text="Длина метода ближайшего соседа: ").place(x=5,y=580)
+testline_label = Label(root)
+testline_label.place(x=215, y=580)
+testline_label.config(text=" ")
 
 Label(root,text="Количество элементов ").place(x=5,y=560)
 line_label = Label(root)
