@@ -144,6 +144,7 @@ def nearest():
 def branch_and_bound():
     global counter
     branch_value = []
+    branch_value[0] = 0
     branch = [0] * counter
     for i in range(counter):
         branch[i] = [0] * counter
@@ -161,26 +162,27 @@ def branch_and_bound():
             if i!=i1:
                 if branch[i][i1] < min:
                     min = branch[i][i1]
-        print(min)
-        graph_value = graph_value + min
+        print('min ', min)
+        branch_value[0] + min
+
         for i1 in range(counter):
             if i != i1:
                 branch[i][i1] = branch[i][i1] - min
 
-    for i in range(counter):
-        min1 = 100000
-        for i1 in range(counter):
-            if i!=i1:
-                if branch[i1][i] < min1:
-                    min1=branch[i1][i]
-        print(min1)
-        graph_value = graph_value + min1
-
-    print('значение ветви',graph_value)
-
     print('новый массив')
     for i in range(counter):
         print(branch[i])
+
+    for i in range(counter):
+        min = 100000
+        for i1 in range(counter):
+            if i!=i1:
+                if branch[i1][i] < min:
+                    min = branch[i1][i]
+        print('min1 ', min)
+        branch_value[0] + min
+
+    print(branch_value[0])
 
 
 def enter_koordinat():
