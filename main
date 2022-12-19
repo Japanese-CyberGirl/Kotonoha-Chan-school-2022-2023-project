@@ -152,8 +152,35 @@ def branch_and_bound():
         for b in range(counter):
             branch[a][b] = sqrt((x_koor[a] - x_koor[b]) ** 2 + (y_koor[a] - y_koor[b]) ** 2)
 
-    print(branch)
+    for i in range(counter):
+        print(branch[i])
 
+    for i in range(counter):
+        min = 100000
+        for i1 in range(counter):
+            if i!=i1:
+                if branch[i][i1] < min:
+                    min = branch[i][i1]
+        print(min)
+        graph_value = graph_value + min
+        for i1 in range(counter):
+            if i != i1:
+                branch[i][i1] = branch[i][i1] - min
+
+    for i in range(counter):
+        min1 = 100000
+        for i1 in range(counter):
+            if i!=i1:
+                if branch[i1][i] < min1:
+                    min1=branch[i1][i]
+        print(min1)
+        graph_value = graph_value + min1
+
+    print('значение ветви',graph_value)
+
+    print('новый массив')
+    for i in range(counter):
+        print(branch[i])
 
 
 def enter_koordinat():
