@@ -164,7 +164,7 @@ def branch_and_bound():
 
     for a in range(counter):
         for b in range(counter):
-            branch[a][b] = sqrt((x_koor[a] - x_koor[b]) ** 2 + (y_koor[a] - y_koor[b]) ** 2)
+            branch[a][b] = sqrt((x_koor[a] - x_koor[b]) ** 2 + (y_koor[a] - y_koor[b]) ** 2) #создание стартовой матрицы
 
     for i in range(counter):
         print(branch[i])
@@ -175,14 +175,14 @@ def branch_and_bound():
         for i1 in range(counter):
             if i!=i1:
                 if branch[i][i1] < min:
-                    min = branch[i][i1]
+                    min = branch[i][i1] #поиск минимального значения в строке
         print('min ', min)
-        branch_value = branch_value + min
+        branch_value = branch_value + min #суммируем минимальные значения строк
         print('минимум точки ', branch_value)
 
         for i1 in range(counter):
             if i != i1:
-                branch[i][i1] = branch[i][i1] - min
+                branch[i][i1] = branch[i][i1] - min #отнимаем минимальное значение строки из всех элементов строки
 
     print('новый массив')
     for i in range(counter):
@@ -192,10 +192,10 @@ def branch_and_bound():
         min = 100000
         for i1 in range(counter):
             if i!=i1:
-                if branch[i1][i] < min:
+                if branch[i1][i] < min: #находим минимальные значения столбцов
                     min = branch[i1][i]
         print('min ', min)
-        branch_value = branch_value + min
+        branch_value = branch_value + min #суммируем значения столбцов со строками (из предыдущего цикла)
         print('минимум точки ', branch_value)
 
     print('итоговый минимум стартовой точки ', branch_value)
@@ -206,31 +206,33 @@ def branch_and_bound():
         min = 10000
         for i1 in range(counter):
             if i1!=i:
-                    if branch[i1][0]<min:
+                    if branch[i1][0]<min: #в этом цикле мы ищем расстояния до остальных точек
                         min = branch[i1][0]
-        min = min + branch[0][i] + branch_value
+        min = min + branch[0][i] + branch_value #складываем вес искомой матрицы, путь до точки i и минимальный элемент из столбца (там короче как на этом сайте было, так и делается, я проверял, все норм вроде)
         branch_graph[i] = min
-        bln = bln + min
         print('минимальная первого столбца: ', min)
 
     for i in range(counter):
-        print(branch_graph[i])
+        print(branch_graph[i]) #вывожу для проверки массив с расстояниями до точек
 
     min=10000
     for i in range(counter):
         if branch_graph[i]<min:
-            if branch_graph[i]!=0:
+            if branch_graph[i]!=0: #нахожу минимальную точку, фиксирую ее номер,прибавляю к маршруту расстояние до нее
                 min = branch_graph[i]
                 binar_counter = i
-
+    bln = bln + min # вот здесь вот расстояние считаю
     print('минимум :', min)
     print(binar_counter)
 
-    canv.create_line(x_koor[min_point], y_koor[min_point], x_koor[binar_counter], y_koor[binar_counter], fill='green',width=1)
-    min_point=binar_counter
+    canv.create_line(x_koor[min_point], y_koor[min_point], x_koor[binar_counter], y_koor[binar_counter], fill='green',width=1) #ну а здесь по задумке должна строится линия от предыдущего пункта до того, который выбран в предыдущем цикле
+    min_point=binar_counter #бинар каунтер принимаем значение предыдущего пункта (его номер в глобальном counter). в общем модель такая же, как и в методе ближайшего соседа
+#посещенным городам приравнивается единица, как это в самой последней строчке функции, а непосещенные равнвются нулям.
+    print('binar: ')
+    for i in range(counter):
+        print(binar[i])
+
     binar[binar_counter] = 1
-
-
 def enter_koordinat():
     global x
     global y
