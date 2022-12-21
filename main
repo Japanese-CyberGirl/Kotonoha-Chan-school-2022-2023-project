@@ -143,18 +143,31 @@ def nearest():
 
 def branch_and_bound():
     global counter
-    branch_value = []
-    branch_value[0] = 0
+    min_point = 0
+    global bln
+    binar_counter = 0
+    binar = []
+    for i in range(counter):
+        binar.append(0)
+    binar[0] = 1
+    branch_graph = []
+    branch_value = 0
+    for i in range(counter):
+        branch_graph.append(0)
     branch = [0] * counter
     for i in range(counter):
         branch[i] = [0] * counter
-        # branch[1][1]=5
+
+
+
+
     for a in range(counter):
         for b in range(counter):
             branch[a][b] = sqrt((x_koor[a] - x_koor[b]) ** 2 + (y_koor[a] - y_koor[b]) ** 2)
 
     for i in range(counter):
         print(branch[i])
+
 
     for i in range(counter):
         min = 100000
@@ -163,7 +176,8 @@ def branch_and_bound():
                 if branch[i][i1] < min:
                     min = branch[i][i1]
         print('min ', min)
-        branch_value[0] + min
+        branch_value = branch_value + min
+        print('минимум точки ', branch_value)
 
         for i1 in range(counter):
             if i != i1:
@@ -179,10 +193,41 @@ def branch_and_bound():
             if i!=i1:
                 if branch[i1][i] < min:
                     min = branch[i1][i]
-        print('min1 ', min)
-        branch_value[0] + min
+        print('min ', min)
+        branch_value = branch_value + min
+        print('минимум точки ', branch_value)
 
-    print(branch_value[0])
+    print('итоговый минимум стартовой точки ', branch_value)
+    for i in range(counter):
+        print(branch[i])
+
+    for i in range(1, counter):
+        min = 10000
+        for i1 in range(counter):
+            if i1!=i:
+                    if branch[i1][0]<min:
+                        min = branch[i1][0]
+        min = min + branch[0][i] + branch_value
+        branch_graph[i] = min
+        bln = bln + min
+        print('минимальная первого столбца: ', min)
+
+    for i in range(counter):
+        print(branch_graph[i])
+
+    min=10000
+    for i in range(counter):
+        if branch_graph[i]<min:
+            if branch_graph[i]!=0:
+                min = branch_graph[i]
+                binar_counter = i
+
+    print('минимум :', min)
+    print(binar_counter)
+
+    canv.create_line(x_koor[min_point], y_koor[min_point], x_koor[binar_counter], y_koor[binar_counter], fill='green',width=1)
+    min_point=binar_counter
+    binar[binar_counter] = 1
 
 
 def enter_koordinat():
@@ -255,10 +300,13 @@ z_label = Label(root)
 z_label.place(x=55, y=50)
 z_label.config(text="0")
 
-Label(root, text="Длина линейной связи:").place(x=5,y=600)
+Label(root, text="Длина линейной связи:").place(x=5,y=620)
 lenline_label = Label(root)
-lenline_label.place(x=215, y=600)
+lenline_label.place(x=215, y=620)
 lenline_label.config(text=" ")
+
+Label(root, text="Длина метода ветвей и границ:").place(x=5,y=600)
+
 
 testline_label = Label(root,text="Длина метода ближайшего соседа: ").place(x=5,y=580)
 testline_label = Label(root)
