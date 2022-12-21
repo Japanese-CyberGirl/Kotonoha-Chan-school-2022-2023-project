@@ -10,6 +10,7 @@ line_counter = 0
 lineline_counter = 0
 tl = 0
 tln = 0
+bln = 0
 
 def teget():
     global x
