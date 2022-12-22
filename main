@@ -144,10 +144,9 @@ def nearest():
 
 def branch_and_bound():
     global counter
+    global line
     min_point = 0
     global bln
-    x_koor1=[counter]
-    y_koor1=[counter]
     min_masx = []
     min_masy=[]
     min_masx.append(x_koor[0])
@@ -164,10 +163,14 @@ def branch_and_bound():
     branch = [0] * len(binar)
     for i in range(len(binar)):
         branch[i] = [0] * counter
-    #делаем функциональный вспомогательный массив координат х и у
-    for i in range(counter):
-        x_koor1[i] = x_koor[i]
-        y_koor1[i] = y_koor[i]
+
+    line = canv.find_all()
+    if len(line) > 2 + counter:
+        for i in range(2, len(line)):
+            canv.delete(line[i])
+        for points_counter in range(0, counter):
+            canv.create_oval(x_koor[points_counter] + 1, y_koor[points_counter] - 1, x_koor[points_counter] + 1, y_koor[points_counter] - 1,
+                             outline="black", fill="blue", width=2)
 
 
     for i100 in range((counter)-1):
@@ -180,7 +183,7 @@ def branch_and_bound():
 
         for a in range(len(binar)):
             for b in range(len(binar)):
-                branch[a][b] = sqrt((x_koor1[a] - x_koor1[b]) ** 2 + (y_koor1[a] - y_koor1[b]) ** 2)  # создание стартовой матрицы
+                branch[a][b] = sqrt((x_koor[a] - x_koor[b]) ** 2 + (y_koor[a] - y_koor[b]) ** 2)  # создание стартовой матрицы
 
         print('СРАВНЕНИЕ ДЛИНЫ БИНАРА И БРЭНЧА', len(binar), len(branch))
 
@@ -252,11 +255,11 @@ def branch_and_bound():
         for i in range (len(binar)):
             print(binar[i])
 
-        min_masx.append(x_koor1[binar_counter])
-        min_masy.append(y_koor1[binar_counter])
+        min_masx.append(x_koor[binar_counter])
+        min_masy.append(y_koor[binar_counter])
         binar.pop(min_point)
-        y_koor1.pop(min_point)
-        x_koor1.pop(min_point)
+        y_koor.pop(min_point)
+        x_koor.pop(min_point)
 
         print('binar: ')
         for i in range(len(binar)):
@@ -264,7 +267,7 @@ def branch_and_bound():
 
         print('x_koor: ')
         for i in range(len(binar)):
-            print(x_koor1[i])
+            print(x_koor[i])
 
         print('next')
 
@@ -284,12 +287,12 @@ def branch_and_bound():
         print('max = ', max)
         print('binar_reloader = ', binar_reloader)
 
-        xkop = x_koor1[0]
-        ykop = y_koor1[0]
-        x_koor1[0] = x_koor1[binar_reloader]
-        y_koor1[0] = y_koor1[binar_reloader]
-        x_koor1[binar_reloader] = xkop
-        y_koor1[binar_reloader] = ykop
+        xkop = x_koor[0]
+        ykop = y_koor[0]
+        x_koor[0] = x_koor[binar_reloader]
+        y_koor[0] = y_koor[binar_reloader]
+        x_koor[binar_reloader] = xkop
+        y_koor[binar_reloader] = ykop
 
         binar[0] = binar[binar_reloader]
         binar[binar_reloader] = 0
@@ -299,14 +302,19 @@ def branch_and_bound():
             print(binar[i])
         print('новый массив епт ')
         for i in range(len(binar)):
-            print(x_koor1[i])
+            print(x_koor[i])
 
         branch.clear()
     print('длина массива новых координат = ', len(min_masx))
     for i in range(len(min_masx)-1):
         canv.create_line((min_masx[i], min_masy[i], min_masx[i+1], min_masy[i+1]), fill='green', width=1)
+        bln = bln + (sqrt((min_masx[i] - min_masx[i+1])**2 + (min_masy[i] - min_masy[i+1])**2))
     canv.create_line((min_masx[0], min_masy[0], min_masx[len(min_masx)-1], min_masy[len(min_masx)-1]), fill='green', width=1)
+    bln = bln + (sqrt((min_masx[0] - min_masx[len(min_masx)-1]) ** 2 + (min_masy[0] - min_masy[len(min_masx)-1]) ** 2))
 
+    line = canv.find_all()
+
+    branchline_label.config(text=bln)
 
 
 def enter_koordinat():
@@ -385,7 +393,9 @@ lenline_label.place(x=215, y=620)
 lenline_label.config(text=" ")
 
 Label(root, text="Длина метода ветвей и границ:").place(x=5,y=600)
-
+branchline_label = Label(root)
+branchline_label.place(x=215, y=600)
+branchline_label.config(text=" ")
 
 testline_label = Label(root,text="Длина метода ближайшего соседа: ").place(x=5,y=580)
 testline_label = Label(root)
