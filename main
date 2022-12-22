@@ -146,6 +146,8 @@ def branch_and_bound():
     global counter
     min_point = 0
     global bln
+    x_koor1=[counter]
+    y_koor1=[counter]
     min_masx = []
     min_masy=[]
     min_masx.append(x_koor[0])
@@ -159,97 +161,153 @@ def branch_and_bound():
     branch_value = 0
     for i in range(counter):
         branch_graph.append(0)
-    branch = [0] * counter
-    for i in range(counter):
+    branch = [0] * len(binar)
+    for i in range(len(binar)):
         branch[i] = [0] * counter
-
-
-
-
-    for a in range(len(binar)):
-        for b in range(len(binar)):
-            branch[a][b] = sqrt((x_koor[a] - x_koor[b]) ** 2 + (y_koor[a] - y_koor[b]) ** 2) #создание стартовой матрицы
-
-
-    for i in range(len(binar)):
-        print(branch[i])
-
-
-    for i in range(len(binar)):
-        min = 100000
-        for i1 in range(len(binar)):
-            if i!=i1:
-                if branch[i][i1] < min:
-                    min = branch[i][i1] #поиск минимального значения в строке
-        print('min ', min)
-        branch_value = branch_value + min #суммируем минимальные значения строк
-        print('минимум точки ', branch_value)
-
-        for i1 in range(counter):
-            if i != i1:
-                branch[i][i1] = branch[i][i1] - min #отнимаем минимальное значение строки из всех элементов строки
-
-    print('новый массив')
+    #делаем функциональный вспомогательный массив координат х и у
     for i in range(counter):
-        print(branch[i])
+        x_koor1[i] = x_koor[i]
+        y_koor1[i] = y_koor[i]
 
-    for i in range(counter):
-        min = 100000
-        for i1 in range(counter):
-            if i!=i1:
-                if branch[i1][i] < min: #находим минимальные значения столбцов
-                    min = branch[i1][i]
-        print('min ', min)
-        branch_value = branch_value + min #суммируем значения столбцов со строками (из предыдущего цикла)
-        print('минимум точки ', branch_value)
 
-    print('итоговый минимум стартовой точки ', branch_value)
-    for i in range(counter):
-        print(branch[i])
+    for i100 in range((counter)-1):
+        print('начинается игра, я открываю тетрадь смерти')
+        print('binar = ', len(binar))
 
-    for i in range(1, len(branch)):
-        min = 10000
-        for i1 in range(len(branch)):
-            if i1!=i:
-                    if branch[i1][0]<min: #в этом цикле мы ищем расстояния до остальных точек
+        branch = [0] * len(binar)
+        for i in range(len(binar)):
+            branch[i] = [0] * counter
+
+        for a in range(len(binar)):
+            for b in range(len(binar)):
+                branch[a][b] = sqrt((x_koor1[a] - x_koor1[b]) ** 2 + (y_koor1[a] - y_koor1[b]) ** 2)  # создание стартовой матрицы
+
+        print('СРАВНЕНИЕ ДЛИНЫ БИНАРА И БРЭНЧА', len(binar), len(branch))
+
+        for i in range(len(binar)):
+            print(branch[i])
+
+        for i in range(len(binar)):
+            min = 100000
+            for i1 in range(len(binar)):
+                if i != i1:
+                    if branch[i][i1] < min:
+                        min = branch[i][i1]  # поиск минимального значения в строке
+            print('min ', min)
+            branch_value = branch_value + min  # суммируем минимальные значения строк
+            print('минимум точки ', branch_value)
+
+            for i1 in range(len(branch)):
+                if i != i1:
+                    branch[i][i1] = branch[i][i1] - min  # отнимаем минимальное значение строки из всех элементов строки
+
+        print('новый массив будущих линий')
+        for i in range(len(branch)):
+            print(branch[i])
+
+        for i in range(len(branch)):
+            min = 100000
+            for i1 in range(len(branch)):
+                if i != i1:
+                    if branch[i1][i] < min:  # находим минимальные значения столбцов
+                        min = branch[i1][i]
+            print('min ', min)
+            branch_value = branch_value + min  # суммируем значения столбцов со строками (из предыдущего цикла)
+            print('минимум точки ', branch_value)
+
+        print('итоговый минимум стартовой точки ', branch_value)
+        for i in range(len(branch)):
+            print(branch[i])
+
+        for i in range(1, len(branch)):
+            min = 10000
+            for i1 in range(len(branch)):
+                if i1 != i:
+                    if branch[i1][0] < min:  # в этом цикле мы ищем расстояния до остальных точек
                         min = branch[i1][0]
-        min = min + branch[0][i] + branch_value #складываем вес искомой матрицы, путь до точки i и минимальный элемент из столбца (там короче как на этом сайте было, так и делается, я проверял, все норм вроде)
-        branch_graph[i] = min
-        print('минимальная первого столбца: ', min)
+            min = min + branch[0][i] + branch_value  # складываем вес искомой матрицы, путь до точки i и минимальный элемент из столбца (там короче как на этом сайте было, так и делается, я проверял, все норм вроде)
+            branch_graph[i] = min
+            print('минимальная первого столбца: ', min)
 
-    for i in range(len(branch)):
-        print(branch_graph[i]) #вывожу для проверки массив с расстояниями до точек
+        for i in range(len(branch)):
+            print(branch_graph[i])  # вывожу для проверки массив с расстояниями до точек
 
-    min=10000
-    for i in range(len(branch)):
-        if branch_graph[i]<min:
-            if branch_graph[i]!=0: #нахожу минимальную точку, фиксирую ее номер,прибавляю к маршруту расстояние до нее
-                min = branch_graph[i]
-                binar_counter = i
-# вот здесь вот расстояние считаю
+        min = 10000
+        for i in range(len(branch)):
+            if branch_graph[i] < min:
+                if branch_graph[i] != 0:  # нахожу минимальную точку, фиксирую ее номер,прибавляю к маршруту расстояние до нее
+                    min = branch_graph[i]
+                    binar_counter = i
+        # вот здесь вот расстояние считаю
 
-    print('минимум :', min)
-    print(binar_counter)
-    binar[binar_counter] = 1
-    min_masx.append(x_koor[binar_counter])
-    min_masy.append(y_koor[binar_counter])
-    binar.pop(min_point)
-    y_koor.pop(min_point)
-    x_koor.pop(min_point)
-    min_point=binar_counter #бинар каунтер принимаем значение предыдущего пункта (его номер в глобальном counter). в общем модель такая же, как и в методе ближайшего соседа
-#посещенным городам приравнивается единица, как это в самой последней строчке функции, а непосещенные равнвются нулям.
+        print('минимум :', min)
+        print('новая точка индекс ', binar_counter)
+        print('длина бинара ', len(binar))
+        print('а вот и сам этот бинар ')
+        for i in range (len(binar)):
+            print(binar[i])
+        binar[binar_counter] = 1
 
-    print('binar: ')
-    for i in range(len(binar)):
-        print(binar[i])
+        print('с новой точкой бинар')
+        for i in range (len(binar)):
+            print(binar[i])
 
-    for i in range(len(binar)):
-        print(x_koor[i])
+        min_masx.append(x_koor1[binar_counter])
+        min_masy.append(y_koor1[binar_counter])
+        binar.pop(min_point)
+        y_koor1.pop(min_point)
+        x_koor1.pop(min_point)
 
-    print('next')
+        print('binar: ')
+        for i in range(len(binar)):
+            print(binar[i])
 
-    for i in range(len(min_masx)):
-        print(min_masx[i])
+        print('x_koor: ')
+        for i in range(len(binar)):
+            print(x_koor1[i])
+
+        print('next')
+
+        for i in range(len(min_masx)):
+            print(min_masx[i])
+
+        max = -1
+        for i in range(len(binar)):
+            if binar[i] > max:
+                max = binar[i]
+                binar_reloader = i
+
+        print('binar: ')
+        for i in range(len(binar)):
+            print(binar[i])
+
+        print('max = ', max)
+        print('binar_reloader = ', binar_reloader)
+
+        xkop = x_koor1[0]
+        ykop = y_koor1[0]
+        x_koor1[0] = x_koor1[binar_reloader]
+        y_koor1[0] = y_koor1[binar_reloader]
+        x_koor1[binar_reloader] = xkop
+        y_koor1[binar_reloader] = ykop
+
+        binar[0] = binar[binar_reloader]
+        binar[binar_reloader] = 0
+
+        print('бинчик новый ')
+        for i in range(len(binar)):
+            print(binar[i])
+        print('новый массив епт ')
+        for i in range(len(binar)):
+            print(x_koor1[i])
+
+        branch.clear()
+    print('длина массива новых координат = ', len(min_masx))
+    for i in range(len(min_masx)-1):
+        canv.create_line((min_masx[i], min_masy[i], min_masx[i+1], min_masy[i+1]), fill='green', width=1)
+    canv.create_line((min_masx[0], min_masy[0], min_masx[len(min_masx)-1], min_masy[len(min_masx)-1]), fill='green', width=1)
+
+
 
 def enter_koordinat():
     global x
