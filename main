@@ -7,7 +7,6 @@ laby = []
 counter = 0
 points_counter = 0
 line_counter = 0
-lineline_counter = 0
 tl = 0
 tln = 0
 bln = 0
@@ -33,14 +32,10 @@ def teget():
 
 def deleting(): #удаление значений массива, нарисованных линий, обнуление counter'a
     global counter
-    global lineline_counter
-    global tl
     global line
     global x_koor
     global y_koor
     counter = 0
-    lineline_counter = 0
-    tl = 0
     x_koor.clear()
     y_koor.clear()
     line = canv.find_all()
@@ -51,10 +46,10 @@ def deleting(): #удаление значений массива, нарисо�
     y_label.config(text="")
     x_label.config(text="")
     lenline_label.config(text=" ")
-
+    testline_label.config(text=" ")
+    branchline_label.config(text=" ")
 
 def lining(): #функия нахождение длины линии и создание линейной последовательности линий между точками
-    global lineline_counter
     global counter
     global tl
     global line
@@ -77,9 +72,6 @@ def lining(): #функия нахождение длины линии и соз
     tl = tl + sqrt((x_koor[counter - 1] - x_koor[0]) * (x_koor[counter - 1] - x_koor[0]) +
                    (y_koor[counter - 1] - y_koor[0]) * (y_koor[counter - 1] - y_koor[0]))
     canv.create_line(x_koor[counter - 1], y_koor[counter - 1], x_koor[0], y_koor[0])
-
-
-
 
     line = canv.find_all()
     lenline_label.config(text=tl)
@@ -139,7 +131,6 @@ def nearest():
     print('длина ', tln)
 
     line = canv.find_all()
-
     testline_label.config(text=tln)
 
 def branch_and_bound():
@@ -163,7 +154,7 @@ def branch_and_bound():
     branch = [0] * len(binar)
     for i in range(len(binar)):
         branch[i] = [0] * counter
-
+    bln = 0
     line = canv.find_all()
     if len(line) > 2 + counter:
         for i in range(2, len(line)):
@@ -174,7 +165,7 @@ def branch_and_bound():
 
 
     for i100 in range((counter)-1):
-        print('начинается игра, я открываю тетрадь смерти')
+        print('новый ход цикла')
         print('binar = ', len(binar))
 
         branch = [0] * len(binar)
@@ -300,7 +291,7 @@ def branch_and_bound():
         print('бинчик новый ')
         for i in range(len(binar)):
             print(binar[i])
-        print('новый массив епт ')
+        print('новый массив  ')
         for i in range(len(binar)):
             print(x_koor[i])
 
@@ -309,9 +300,10 @@ def branch_and_bound():
     for i in range(len(min_masx)-1):
         canv.create_line((min_masx[i], min_masy[i], min_masx[i+1], min_masy[i+1]), fill='green', width=1)
         bln = bln + (sqrt((min_masx[i] - min_masx[i+1])**2 + (min_masy[i] - min_masy[i+1])**2))
+    print('длина ', bln)
     canv.create_line((min_masx[0], min_masy[0], min_masx[len(min_masx)-1], min_masy[len(min_masx)-1]), fill='green', width=1)
     bln = bln + (sqrt((min_masx[0] - min_masx[len(min_masx)-1]) ** 2 + (min_masy[0] - min_masy[len(min_masx)-1]) ** 2))
-
+    print('длина ', bln)
     line = canv.find_all()
 
     branchline_label.config(text=bln)
