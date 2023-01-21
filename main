@@ -1,5 +1,7 @@
 from tkinter import *
 from math import sqrt
+from tkinter.filedialog import askopenfilename
+import csv
 x_koor = []
 y_koor = []
 labx = []
@@ -10,6 +12,7 @@ line_counter = 0
 tl = 0
 tln = 0
 bln = 0
+v=""
 
 def teget():
     global x
@@ -29,6 +32,29 @@ def teget():
                          outline="black", fill="blue", width=2)
     line = canv.find_all()
     line_label.config(text=line)
+
+
+def csv_read():
+ global x
+ global y
+ global counter
+ csv_file_path = askopenfilename()
+ with open(csv_file_path) as f:
+  reader = csv.reader(f, delimiter="\t")
+  for i, line in enumerate(reader):
+   print ('line[{}] = {}'.format(i, line))
+   x_koor.append(int(line[0]) + 500)
+   y_koor.append(400 - int(line[1]))
+   labx.append(int(line[0]))
+   laby.append(int(line[1]))
+   counter = counter + 1
+   canv.create_oval(x_koor[counter - 1] + 1, y_koor[counter - 1] - 1, x_koor[counter - 1] + 1, y_koor[counter - 1] - 1,
+                    outline="black", fill="blue", width=2)
+ x_label.config(text=labx)
+ y_label.config(text=laby)
+ z_label.config(text=counter)
+ line = canv.find_all()
+ line_label.config(text=line)
 
 def deleting(): #удаление значений массива, нарисованных линий, обнуление counter'a
     global counter
@@ -318,8 +344,8 @@ def enter_koordinat():
     children.title("Ввод координат")
     children.geometry("250x175")
 
-    label1 = Label(children, text="Введите координаты")
-    label1.pack()
+    label_koord = Label(children, text="Введите координаты")
+    label_koord.pack()
 
     label2 = Label(children, text="Координата x")
     label2.pack()
@@ -353,14 +379,15 @@ canv.create_line(0, 400, 1000, 400, width=2, arrow=LAST)
 
 btn1 = Button(root, text="Ввод координат", command=enter_koordinat)
 btn1.pack()
+btn_enter = Button(root, text="Загрузка из excel", command=csv_read)
+btn_enter.pack()
+btn_clear = Button(root, text="Очистить поле", command=deleting).place(x=30, y=510)
 
-btn2 = Button(root, text="Очистить поле", command=deleting).place(x=30, y=510)
+btn_line = Button(root, text="Линейное соединение массива", command=lining).place(x=30, y=130)
 
-btn3 = Button(root, text="Линейное соединение массива", command=lining).place(x=30, y=130)
+btn_nightboard = Button(root, text="Метод ближайшего соседа", command = nearest).place(x=30, y=165)
 
-btn4 = Button(root, text="Метод ближайшего соседа", command = nearest).place(x=30, y=165)
-
-btn5 = Button(root, text="Метод ветвей и границ", command = branch_and_bound).place(x=30, y=200)
+btn_branch = Button(root, text="Метод ветвей и границ", command = branch_and_bound).place(x=30, y=200)
 
 
 
