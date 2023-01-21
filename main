@@ -170,6 +170,13 @@ def branch_and_bound():
     min_masy.append(y_koor[0])
     binar_counter = 0
     binar = []
+    x_koor1 = []
+    y_koor1 = []
+
+    for i in range(counter):
+        x_koor1.append(x_koor[i])
+        y_koor1.append(y_koor[i])
+
     for i in range(counter):
         binar.append(0)
     binar[0] = 1
@@ -186,7 +193,7 @@ def branch_and_bound():
         for i in range(2, len(line)):
             canv.delete(line[i])
         for points_counter in range(0, counter):
-            canv.create_oval(x_koor[points_counter] + 1, y_koor[points_counter] - 1, x_koor[points_counter] + 1, y_koor[points_counter] - 1,
+            canv.create_oval(x_koor1[points_counter] + 1, y_koor1[points_counter] - 1, x_koor1[points_counter] + 1, y_koor1[points_counter] - 1,
                              outline="black", fill="blue", width=2)
 
 
@@ -200,7 +207,7 @@ def branch_and_bound():
 
         for a in range(len(binar)):
             for b in range(len(binar)):
-                branch[a][b] = sqrt((x_koor[a] - x_koor[b]) ** 2 + (y_koor[a] - y_koor[b]) ** 2)  # создание стартовой матрицы
+                branch[a][b] = sqrt((x_koor1[a] - x_koor1[b]) ** 2 + (y_koor1[a] - y_koor1[b]) ** 2)  # создание стартовой матрицы
 
         print('СРАВНЕНИЕ ДЛИНЫ БИНАРА И БРЭНЧА', len(binar), len(branch))
 
@@ -272,19 +279,19 @@ def branch_and_bound():
         for i in range (len(binar)):
             print(binar[i])
 
-        min_masx.append(x_koor[binar_counter])
-        min_masy.append(y_koor[binar_counter])
+        min_masx.append(x_koor1[binar_counter])
+        min_masy.append(y_koor1[binar_counter])
         binar.pop(min_point)
-        y_koor.pop(min_point)
-        x_koor.pop(min_point)
+        y_koor1.pop(min_point)
+        x_koor1.pop(min_point)
 
         print('binar: ')
         for i in range(len(binar)):
             print(binar[i])
 
-        print('x_koor: ')
+        print('x_koor1: ')
         for i in range(len(binar)):
-            print(x_koor[i])
+            print(x_koor1[i])
 
         print('next')
 
@@ -304,12 +311,12 @@ def branch_and_bound():
         print('max = ', max)
         print('binar_reloader = ', binar_reloader)
 
-        xkop = x_koor[0]
-        ykop = y_koor[0]
-        x_koor[0] = x_koor[binar_reloader]
-        y_koor[0] = y_koor[binar_reloader]
-        x_koor[binar_reloader] = xkop
-        y_koor[binar_reloader] = ykop
+        xkop = x_koor1[0]
+        ykop = y_koor1[0]
+        x_koor1[0] = x_koor1[binar_reloader]
+        y_koor1[0] = y_koor1[binar_reloader]
+        x_koor1[binar_reloader] = xkop
+        y_koor1[binar_reloader] = ykop
 
         binar[0] = binar[binar_reloader]
         binar[binar_reloader] = 0
@@ -319,7 +326,7 @@ def branch_and_bound():
             print(binar[i])
         print('новый массив  ')
         for i in range(len(binar)):
-            print(x_koor[i])
+            print(x_koor1[i])
 
         branch.clear()
     print('длина массива новых координат = ', len(min_masx))
