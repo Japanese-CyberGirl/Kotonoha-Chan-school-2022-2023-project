@@ -272,12 +272,12 @@ def branch_and_bound():
         print('длина бинара ', len(binar))
         print('а вот и сам этот бинар ')
         for i in range (len(binar)):
-            print(binar[i])
+            print(binar[i], ' x=',x_koor1[i],' y=',y_koor1[i])
         binar[binar_counter] = 1
 
         print('с новой точкой бинар')
         for i in range (len(binar)):
-            print(binar[i])
+            print(binar[i], ' x=',x_koor1[i],' y=',y_koor1[i])
 
         min_masx.append(x_koor1[binar_counter])
         min_masy.append(y_koor1[binar_counter])
@@ -287,13 +287,10 @@ def branch_and_bound():
 
         print('binar: ')
         for i in range(len(binar)):
-            print(binar[i])
+            print(binar[i], ' x=',x_koor1[i],' y=',y_koor1[i])
 
-        print('x_koor1: ')
-        for i in range(len(binar)):
-            print(x_koor1[i])
 
-        print('next')
+        print('новый маршрут')
 
         for i in range(len(min_masx)):
             print(min_masx[i])
