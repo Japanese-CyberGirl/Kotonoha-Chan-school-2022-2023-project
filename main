@@ -384,9 +384,9 @@ canv.create_line(0, 400, 1000, 400, width=2, arrow=LAST)
 
  # Параметрами метода create_line() являются координаты x и y, которые обозначают стартовые и конечные точки линии.
 
-btn1 = Button(root, text="Ввод координат", command=enter_koordinat)
+btn1 = Button(root, text="Ввод координат",width=20,height=2, command=enter_koordinat)
 btn1.pack()
-btn_enter = Button(root, text="Загрузка из excel", command=csv_read)
+btn_enter = Button(root, text="Загрузка из excel",width=20,height=2, command=csv_read)
 btn_enter.pack()
 btn_clear = Button(root, text="Очистить поле", command=deleting).place(x=30, y=510)
 
