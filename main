@@ -381,17 +381,17 @@ canv.create_line(0, 400, 1000, 400, width=2, arrow=LAST)
 
  # Параметрами метода create_line() являются координаты x и y, которые обозначают стартовые и конечные точки линии.
 
-btn1 = Button(root, text="Ввод координат",width=20,height=2, command=enter_koordinat)
+btn1 = Button(root, text="Ввод координат", font='Times 12',width=20,height=2, command=enter_koordinat)
 btn1.pack()
-btn_enter = Button(root, text="Загрузка из excel",width=20,height=2, command=csv_read)
+btn_enter = Button(root, text="Загрузка из excel", font='Times 12',width=20,height=2, command=csv_read)
 btn_enter.pack()
-btn_clear = Button(root, text="Очистить поле", command=deleting).place(x=30, y=510)
+btn_clear = Button(root, text="Очистить поле", font='Times 15', height=2,width=15, command=deleting).place(x=20, y=480)
 
-btn_line = Button(root, text="Линейное соединение массива", command=lining).place(x=30, y=130)
+btn_line = Button(root, text="Линейное соединение массива", font='Times 13',height=2,width=25, command=lining).place(x=20, y=130)
 
-btn_nightboard = Button(root, text="Метод ближайшего соседа", command = nearest).place(x=30, y=165)
+btn_nightboard = Button(root, text="Метод ближайшего соседа", font='Times 13',height=2,width=25, command = nearest).place(x=20, y=200)
 
-btn_branch = Button(root, text="Метод ветвей и границ", command = branch_and_bound).place(x=30, y=200)
+btn_branch = Button(root, text="Метод ветвей и границ", font='Times 13', height=2,width=25, command = branch_and_bound).place(x=20, y=270)
 
 
 
@@ -431,7 +431,7 @@ line_label.place(x=155, y=560)
 line_label.config(text="0")
 
 
-quitButton = Button(root, text="Закрыть окно", command=quit)
-quitButton.place(x=1200, y=0)
+quitButton = Button(root, text="Закрыть окно", font='Times 13', height=2,width=15, command=quit)
+quitButton.place(x=1200, y=10)
 canv.pack()
 root.mainloop()
