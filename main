@@ -2,6 +2,7 @@ from tkinter import *
 from math import sqrt
 from tkinter.filedialog import askopenfilename
 import csv
+import numpy as np
 x_koor = []
 y_koor = []
 labx = []
@@ -160,34 +161,17 @@ def nearest():
     testline_label.config(text=tln)
 
 def branch_and_bound():
+
     global counter
-    global line
-    min_point = 0
-    global bln
-    min_masx = []
-    min_masy=[]
-    min_masx.append(x_koor[0])
-    min_masy.append(y_koor[0])
-    binar_counter = 0
-    binar = []
+
+    rowNums = 0
+    colNums = 0
     x_koor1 = []
     y_koor1 = []
-
     for i in range(counter):
         x_koor1.append(x_koor[i])
         y_koor1.append(y_koor[i])
 
-    for i in range(counter):
-        binar.append(0)
-    binar[0] = 1
-    branch_graph = []
-    branch_value = 0
-    for i in range(counter):
-        branch_graph.append(0)
-    branch = [0] * len(binar)
-    for i in range(len(binar)):
-        branch[i] = [0] * counter
-    bln = 0
     line = canv.find_all()
     if len(line) > 2 + counter:
         for i in range(2, len(line)):
@@ -197,146 +181,195 @@ def branch_and_bound():
                              outline="black", fill="blue", width=2)
 
 
-    for i100 in range((counter)-1):
-        print('новый ход цикла')
-        print('binar = ', len(binar))
-
-        branch = [0] * len(binar)
-        for i in range(len(binar)):
-            branch[i] = [0] * counter
-
-        for a in range(len(binar)):
-            for b in range(len(binar)):
-                branch[a][b] = sqrt((x_koor1[a] - x_koor1[b]) ** 2 + (y_koor1[a] - y_koor1[b]) ** 2)  # создание стартовой матрицы
-
-        print('СРАВНЕНИЕ ДЛИНЫ БИНАРА И БРЭНЧА', len(binar), len(branch))
-
-        for i in range(len(binar)):
-            print(branch[i])
-
-        for i in range(len(binar)):
-            min = 100000
-            for i1 in range(len(binar)):
-                if i != i1:
-                    if branch[i][i1] < min:
-                        min = branch[i][i1]  # поиск минимального значения в строке
-            print('min ', min)
-            branch_value = branch_value + min  # суммируем минимальные значения строк
-            print('минимум точки ', branch_value)
-
-            for i1 in range(len(branch)):
-                if i != i1:
-                    branch[i][i1] = branch[i][i1] - min  # отнимаем минимальное значение строки из всех элементов строки
-
-        print('новый массив будущих линий')
-        for i in range(len(branch)):
-            print(branch[i])
-
-        for i in range(len(branch)):
-            min = 100000
-            for i1 in range(len(branch)):
-                if i != i1:
-                    if branch[i1][i] < min:  # находим минимальные значения столбцов
-                        min = branch[i1][i]
-            print('min ', min)
-            branch_value = branch_value + min  # суммируем значения столбцов со строками (из предыдущего цикла)
-            print('минимум точки ', branch_value)
-
-        print('итоговый минимум стартовой точки ', branch_value)
-        for i in range(len(branch)):
-            print(branch[i])
-
-        for i in range(1, len(branch)):
-            min = 10000
-            for i1 in range(len(branch)):
-                if i1 != i:
-                    if branch[i1][0] < min:  # в этом цикле мы ищем расстояния до остальных точек
-                        min = branch[i1][0]
-            min = min + branch[0][i] + branch_value  # складываем вес искомой матрицы, путь до точки i и минимальный элемент из столбца (там короче как на этом сайте было, так и делается, я проверял, все норм вроде)
-            branch_graph[i] = min
-            print('минимальная первого столбца: ', min)
-
-        for i in range(len(branch)):
-            print(branch_graph[i])  # вывожу для проверки массив с расстояниями до точек
-
-        min = 10000
-        for i in range(len(branch)):
-            if branch_graph[i] < min:
-                if branch_graph[i] != 0:  # нахожу минимальную точку, фиксирую ее номер,прибавляю к маршруту расстояние до нее
-                    min = branch_graph[i]
-                    binar_counter = i
-        # вот здесь вот расстояние считаю
-
-        print('минимум :', min)
-        print('новая точка индекс ', binar_counter)
-        print('длина бинара ', len(binar))
-        print('а вот и сам этот бинар ')
-        for i in range (len(binar)):
-            print(binar[i], ' x=',x_koor1[i],' y=',y_koor1[i])
-        binar[binar_counter] = 1
-
-        print('с новой точкой бинар')
-        for i in range (len(binar)):
-            print(binar[i], ' x=',x_koor1[i],' y=',y_koor1[i])
-
-        min_masx.append(x_koor1[binar_counter])
-        min_masy.append(y_koor1[binar_counter])
-        binar.pop(min_point)
-        y_koor1.pop(min_point)
-        x_koor1.pop(min_point)
-
-        print('binar: ')
-        for i in range(len(binar)):
-            print(binar[i], ' x=',x_koor1[i],' y=',y_koor1[i])
+    result=[[],[]]
+    result[0].append(x_koor1[0])
+    result[1].append(y_koor1[0])
+    print('координаты точек ', x_koor1, y_koor1)
+    for i in range(counter-1):
+        branch = enterMatrix(x_koor1,y_koor1)
+        print(branch)
+        branch, sumOfRowReduction = rowReduction(branch)
+        branch, sumOfColReduction = colReduction(branch)
+        print(branch)
+        cost0 = sum(sumOfColReduction) + sum(sumOfRowReduction)
+        print('итоговый минимум стартовой точки ', cost0)
+        costBound = lowerBound(branch)
+        print('цена ветви',costBound)
+        costEdge = Edge(branch)
+        print('цена узла',costEdge)
+        point = findMinCost(costEdge, costBound, cost0)
+        print(point)
+        #print(x_koor1, y_koor1)
+        x_koor1, y_koor1 = recWay(result, point, x_koor1, y_koor1)
+        print(x_koor1, y_koor1)
+        #print('координаты пути ',result)
+        #print(result[0])
+        #print(result[1])
+    result[0].append(x_koor1[0])
+    result[1].append(y_koor1[0])
+    tl=0
+    for points_counter in range(len(result[0])-1):
+        tl = tl + sqrt((result[0][points_counter] - result[0][points_counter + 1]) *
+                       (result[0][points_counter] - result[0][points_counter + 1]) +
+                       (result[1][points_counter] - result[1][points_counter + 1]) *
+                       (result[1][points_counter] - result[1][points_counter + 1]))
+        canv.create_line(result[0][points_counter], result[1][points_counter], result[0][points_counter+1], result[1][points_counter+1])
+    tl = tl + sqrt((result[0][len(result[0]) - 1] - result[0][0]) * (result[0][len(result[0]) - 1] - result[0][0]) +
+                   (result[1][len(result[0]) - 1] - result[1][0]) * (result[1][len(result[0]) - 1] - result[1][0]))
+    canv.create_line(result[0][len(result[0]) - 1], result[1][len(result[0]) - 1], result[0][0], result[1][0])
+    print(tl)
+    branchline_label.config(text=tl)
 
 
-        print('новый маршрут')
 
-        for i in range(len(min_masx)):
-            print(min_masx[i])
+def enterMatrix(x_koor1,y_koor1):
+    """
+    заполение массива расстояний на основе координат
 
-        max = -1
-        for i in range(len(binar)):
-            if binar[i] > max:
-                max = binar[i]
-                binar_reloader = i
+    :return:
+    """
+    branch = np.zeros([len(x_koor1), len(x_koor1)])  # Шаблон матрицы
+    # относительных расстояний между пунктами
+    for i in np.arange(0, len(x_koor1), 1):
+        for j in np.arange(0, len(x_koor1), 1):
+            if i != j:
+                branch[i, j] = sqrt((x_koor1[i] - x_koor1[j])** 2
+                                       + (y_koor1[i] - y_koor1[j]) ** 2)
+                   # Заполнение матрицы
+            else:
+                branch[i, j] = float('inf')  # Заполнение главной
+                   # диагонали матрицы
+    return branch
 
-        print('binar: ')
-        for i in range(len(binar)):
-            print(binar[i])
 
-        print('max = ', max)
-        print('binar_reloader = ', binar_reloader)
 
-        xkop = x_koor1[0]
-        ykop = y_koor1[0]
-        x_koor1[0] = x_koor1[binar_reloader]
-        y_koor1[0] = y_koor1[binar_reloader]
-        x_koor1[binar_reloader] = xkop
-        y_koor1[binar_reloader] = ykop
 
-        binar[0] = binar[binar_reloader]
-        binar[binar_reloader] = 0
+def findSmallestElementInRow(array, row):
+    """
+    Поиск наименьшего значение в СТРОКЕ
+    :param  array:
+    :param  row:
+    :return: минимальный элемент
+    """
+    #minElement = root.winfo_width()
+    minElement = 100000
+    for element in array[row]:
+        # print(element)
+        if minElement > element:
+            minElement = element
+    if minElement == 100000:
+        minElement=0
+    return minElement
 
-        print('бинчик новый ')
-        for i in range(len(binar)):
-            print(binar[i])
-        print('новый массив  ')
-        for i in range(len(binar)):
-            print(x_koor1[i])
+def findSmallestElementInCol(array, col):
+    """
+    Поиск наименьшего значение в СТОЛБЦЕ
+    :param array:
+    :param col:
+    :return: минимальный элемент
+    """
+    minElement = 100000
+    for element in array[:, col]:
+        if minElement > element:
+            minElement = element
+    if minElement == 100000:
+        minElement=0
+    return minElement
 
-        branch.clear()
-    print('длина массива новых координат = ', len(min_masx))
-    for i in range(len(min_masx)-1):
-        canv.create_line((min_masx[i], min_masy[i], min_masx[i+1], min_masy[i+1]), fill='green', width=1)
-        bln = bln + (sqrt((min_masx[i] - min_masx[i+1])**2 + (min_masy[i] - min_masy[i+1])**2))
-    print('длина ', bln)
-    canv.create_line((min_masx[0], min_masy[0], min_masx[len(min_masx)-1], min_masy[len(min_masx)-1]), fill='green', width=1)
-    bln = bln + (sqrt((min_masx[0] - min_masx[len(min_masx)-1]) ** 2 + (min_masy[0] - min_masy[len(min_masx)-1]) ** 2))
-    print('длина ', bln)
-    line = canv.find_all()
 
-    branchline_label.config(text=bln)
+def rowReduction(array):
+    """
+    Редукция строк
+    :param array:
+    :return:
+    """
+    rowCoefficients = []
+    for i in range(len(array)):
+        #   print(array[i])
+        minElement = findSmallestElementInRow(array, i)
+        rowCoefficients.append(minElement)
+        for j in range(len(array[i])):
+            array[i][j] -= minElement
+    return array, rowCoefficients
+def colReduction(array):
+    """
+    Редукция столбцов
+    :param array:
+    :return:
+    """
+    colCoefficients = []
+    for i in range(len(array)):
+        minElement = findSmallestElementInCol(array, i)
+        colCoefficients.append(minElement)
+        for j in range(len(array[:, i])):
+            array[j][i] -= minElement
+    return array, colCoefficients
+
+def lowerBound(array):
+    """
+
+    :param array:
+    :return:
+    """
+    costBound = []  # Массив стоимости ветви от исходной точки
+    for i in range(1, len(array)):
+        newMatrix = array.copy()
+        for j in range(len(newMatrix[:, i])):
+            newMatrix[j][i] = float("inf")
+        print(newMatrix)
+        newMatrix, sumOfRowReduction = rowReduction(newMatrix)
+        newMatrix, sumOfColReduction = colReduction(newMatrix)
+        costBound.append(sum(sumOfColReduction) + sum(sumOfRowReduction))
+    return costBound
+
+def Edge(array):
+    """
+
+    :param array:
+    :return:
+    """
+    costEdge = []  # Массив стоимости следующих узлов
+    j=0
+    for i in range(1, len(array)):
+        newMatrix = array.copy()
+        costEdge.append(newMatrix[i][j])
+    return costEdge
+def findMinCost(arrayEdge, arrayBound, costStart):
+    """
+    Поиск кратчайшей стоимости
+    :param arrayEdge: стоимость узла
+    :param arrayBound: стоимость ветви
+    :param costStart: стоимость начальной точки
+    :return:
+    """
+    cost=[]
+    for i in range(len(arrayEdge)):
+        cost.append(arrayEdge[i] + arrayBound[i] + costStart)
+    print(cost)
+    ind = cost.index(min(cost))
+    return ind
+
+
+def recWay(way,point, x,y):
+    """
+    заносим в массив координат путей очередную координату пути
+    удаляем сам путь
+    :param way:
+    :return
+    """
+    way[0].append(x[0])
+    way[1].append(y[0])
+
+    del x[0]
+    del y[0]
+    x_point = x[point]
+    y_point = y[point]
+    del x[point]
+    del y[point]
+    x.insert(0,x_point)
+    y.insert(0,y_point)
+    return x,y
+
 
 
 def enter_koordinat():
