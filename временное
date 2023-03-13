@@ -4,6 +4,7 @@ from tkinter.filedialog import askopenfilename
 import math
 import csv
 import numpy as np
+
 x_koor = []
 y_koor = []
 labx = []
@@ -14,52 +15,56 @@ line_counter = 0
 tl = 0
 tln = 0
 bln = 0
-v=""
+v = ""
+
 
 def teget():
     global x
     global y
     global counter
-    x_koor.append(int(x.get())+500)
+    x_koor.append(int(x.get()) + 500)
     y_koor.append(400 - int(y.get()))
     labx.append(int(x.get()))
     laby.append(int(y.get()))
     counter = counter + 1
 
-    x_label.config(text= labx)
-    y_label.config(text= laby)
+    x_label.config(text=labx)
+    y_label.config(text=laby)
     z_label.config(text=counter)
     if counter > 0:
-        canv.create_oval(x_koor[counter - 1] + 1, y_koor[counter - 1] - 1, x_koor[counter - 1] + 1, y_koor[counter - 1] - 1,
+        canv.create_oval(x_koor[counter - 1] + 1, y_koor[counter - 1] - 1, x_koor[counter - 1] + 1,
+                         y_koor[counter - 1] - 1,
                          outline="black", fill="blue", width=2)
     line = canv.find_all()
     line_label.config(text=line)
 
 
 def csv_read():
- global x
- global y
- global counter
- csv_file_path = askopenfilename()
- with open(csv_file_path) as f:
-  reader = csv.reader(f, delimiter="\t")
-  for i, line in enumerate(reader):
-   print ('line[{}] = {}'.format(i, line))
-   x_koor.append(int(line[0]) + 500)
-   y_koor.append(400 - int(line[1]))
-   labx.append(int(line[0]))
-   laby.append(int(line[1]))
-   counter = counter + 1
-   canv.create_oval(x_koor[counter - 1] + 1, y_koor[counter - 1] - 1, x_koor[counter - 1] + 1, y_koor[counter - 1] - 1,
-                    outline="black", fill="blue", width=2)
- x_label.config(text=labx)
- y_label.config(text=laby)
- z_label.config(text=counter)
- line = canv.find_all()
- line_label.config(text=line)
- print()
+    global x
+    global y
+    global counter
+    csv_file_path = askopenfilename()
+    with open(csv_file_path) as f:
+        reader = csv.reader(f, delimiter="\t")
+        for i, line in enumerate(reader):
+            print('line[{}] = {}'.format(i, line))
+            x_koor.append(int(line[0]) + 500)
+            y_koor.append(400 - int(line[1]))
+            labx.append(int(line[0]))
+            laby.append(int(line[1]))
+            counter = counter + 1
+            canv.create_oval(x_koor[counter - 1] + 1, y_koor[counter - 1] - 1, x_koor[counter - 1] + 1,
+                             y_koor[counter - 1] - 1,
+                             outline="black", fill="blue", width=2)
+    x_label.config(text=labx)
+    y_label.config(text=laby)
+    z_label.config(text=counter)
+    line = canv.find_all()
+    line_label.config(text=line)
+    print()
 
-def deleting(): #удаление значений массива, нарисованных линий, обнуление counter'a
+
+def deleting():  # удаление значений массива, нарисованных линий, обнуление counter'a
     global counter
     global line
     global x_koor
@@ -78,7 +83,8 @@ def deleting(): #удаление значений массива, нарисо�
     testline_label.config(text=" ")
     branchline_label.config(text=" ")
 
-def lining(): #функия нахождение длины линии и создание линейной последовательности линий между точками
+
+def lining():  # функия нахождение длины линии и создание линейной последовательности линий между точками
     global counter
     global tl
     global line
@@ -89,15 +95,18 @@ def lining(): #функия нахождение длины линии и соз
         for i in range(2, len(line)):
             canv.delete(line[i])
         for points_counter in range(0, counter):
-            canv.create_oval(x_koor[points_counter] + 1, y_koor[points_counter] - 1, x_koor[points_counter] + 1, y_koor[points_counter] - 1,
+            canv.create_oval(x_koor[points_counter] + 1, y_koor[points_counter] - 1, x_koor[points_counter] + 1,
+                             y_koor[points_counter] - 1,
                              outline="black", fill="blue", width=2)
 
+    for points_counter in range(0, counter - 1):
+        canv.create_line(x_koor[points_counter], y_koor[points_counter], x_koor[points_counter + 1],
+                         y_koor[points_counter + 1])
 
-    for points_counter in range(0, counter-1):
-        canv.create_line(x_koor[points_counter], y_koor[points_counter], x_koor[points_counter+1], y_koor[points_counter+1])
-
-        tl =  tl + sqrt((x_koor[points_counter] - x_koor[points_counter+1]) * (x_koor[points_counter] - x_koor[points_counter+1]) +
-                    (y_koor[points_counter] - y_koor[points_counter+1]) * (y_koor[points_counter] - y_koor[points_counter+1]))
+        tl = tl + sqrt((x_koor[points_counter] - x_koor[points_counter + 1]) * (
+                    x_koor[points_counter] - x_koor[points_counter + 1]) +
+                       (y_koor[points_counter] - y_koor[points_counter + 1]) * (
+                                   y_koor[points_counter] - y_koor[points_counter + 1]))
     tl = tl + sqrt((x_koor[counter - 1] - x_koor[0]) * (x_koor[counter - 1] - x_koor[0]) +
                    (y_koor[counter - 1] - y_koor[0]) * (y_koor[counter - 1] - y_koor[0]))
     canv.create_line(x_koor[counter - 1], y_koor[counter - 1], x_koor[0], y_koor[0])
@@ -108,7 +117,6 @@ def lining(): #функия нахождение длины линии и соз
 
 
 def nearest():
-
     global line
     global tln
     tln = 0
@@ -129,12 +137,13 @@ def nearest():
         for i in range(2, len(line)):
             canv.delete(line[i])
         for points_counter in range(0, counter):
-            canv.create_oval(x_koor[points_counter] + 1, y_koor[points_counter] - 1, x_koor[points_counter] + 1, y_koor[points_counter] - 1,
+            canv.create_oval(x_koor[points_counter] + 1, y_koor[points_counter] - 1, x_koor[points_counter] + 1,
+                             y_koor[points_counter] - 1,
                              outline="black", fill="blue", width=2)
 
-    for z in range(0,len(binar)):
+    for z in range(0, len(binar)):
         for i in range(0, len(binar)):
-                graph.append(sqrt((x_koor[binar_counter] - x_koor[i])**2 + (y_koor[binar_counter] - y_koor[i])**2))
+            graph.append(sqrt((x_koor[binar_counter] - x_koor[i]) ** 2 + (y_koor[binar_counter] - y_koor[i]) ** 2))
 
         print('графы ', graph)
         print('бинар ', binar)
@@ -144,7 +153,8 @@ def nearest():
                     min_point = j
                     min = graph[j]
         tln = tln + min
-        canv.create_line(x_koor[min_point], y_koor[min_point], x_koor[binar_counter], y_koor[binar_counter], fill='red', width=1)
+        canv.create_line(x_koor[min_point], y_koor[min_point], x_koor[binar_counter], y_koor[binar_counter], fill='red',
+                         width=1)
         print('min = ', min)
         print('min_point = ', min_point)
         binar[min_point] = 1
@@ -154,7 +164,7 @@ def nearest():
         graph.clear()
         min = 1000000
 
-    tln = tln + (sqrt((x_koor[binar_counter] - x_koor[0])**2 + (y_koor[binar_counter] - y_koor[0])**2))
+    tln = tln + (sqrt((x_koor[binar_counter] - x_koor[0]) ** 2 + (y_koor[binar_counter] - y_koor[0]) ** 2))
     canv.create_line((x_koor[0], y_koor[0], x_koor[binar_counter], y_koor[binar_counter]), fill='red', width=1)
     tln = tln - 1000000
     print('длина ', tln)
@@ -162,23 +172,24 @@ def nearest():
     line = canv.find_all()
     testline_label.config(text=tln)
 
+
 def branch_and_bound():
     global counter
     global line
     min_point = 0
     global bln
     min_masx = []
-    min_masy=[]
+    min_masy = []
     min_masx.append(x_koor[0])
     min_masy.append(y_koor[0])
     binar = []
-    minhor=[]
-    minver=[]
+    minhor = []
+    minver = []
     localbound = 0
     x_koor1 = []
     y_koor1 = []
 
-    #корневое решение
+    # корневое решение
     for i in range(counter):
         binar.append(0)
     binar[0] = 1
@@ -204,47 +215,47 @@ def branch_and_bound():
                 # Вывод матрицы
     for i in range(len(branch)):
         for j in range(len(branch)):
-            if i!=j:
+            if i != j:
                 q = (branch[i][j])
                 qq = math.trunc(q)
-                print(' ',qq,end="")
+                print(' ', qq, end="")
             else:
-                print(' inf',end="")
+                print(' inf', end="")
 
         # Нахождение минимума строки
-        minh=10000000
+        minh = 10000000
         for i1 in range(len(branch)):
             if (branch[i][i1] < minh):
                 minh = branch[i][i1]
         minhor.append(minh)
         localbound = localbound + minh
         minh = math.trunc(minh)
-        print(' |  min = ',minh,end="")
+        print(' |  min = ', minh, end="")
         print('\n')
 
     branch_not_change = branch.copy()
 
-    print('ПолуУпрощенная матрица','\n')
-    for i in range(len(binar)):
-        for j in range(len(binar)):
+    print('ПолуУпрощенная матрица', '\n')
+    for i in range(len(branch)):
+        for j in range(len(branch)):
             branch[i][j] = branch[i][j] - minhor[i]
 
     for i in range(len(branch)):
         for j in range(len(branch)):
-            if i!=j:
+            if i != j:
                 q = (branch[i][j])
                 qq = math.trunc(q)
-                print(' ',qq,end="")
+                print(' ', qq, end="")
             else:
-                print(' inf',end="")
+                print(' inf', end="")
         print('\n')
     for i in range(len(binar)):
-        print('  - ',end="")
+        print('  - ', end="")
     print('\n')
-    #нахождение минимума столбца
-    for i in range (len(branch)):
-        minv=1000000
-        for j in range (len(branch)):
+    # нахождение минимума столбца
+    for i in range(len(branch)):
+        minv = 1000000
+        for j in range(len(branch)):
             if (branch[j][i] < minv):
                 minv = branch[j][i]
         minver.append(minv)
@@ -260,17 +271,17 @@ def branch_and_bound():
 
     for i in range(len(branch)):
         for j in range(len(branch)):
-            if i!=j:
+            if i != j:
                 q = (branch[i][j])
                 qq = math.trunc(q)
-                print(' ',qq,end="")
+                print(' ', qq, end="")
             else:
-                print(' inf',end="")
+                print(' inf', end="")
         print('\n')
     qq = math.trunc(localbound)
-    print('Локальная нижняя граница = ',qq)
+    print('Локальная нижняя граница = ', qq)
 
-    #поиск нулевых клеток
+    # поиск нулевых клеток
     nul = 0
     max = 0
     for i in range(len(branch)):
@@ -281,8 +292,8 @@ def branch_and_bound():
                 print(' ', qq, end="")
             else:
                 print(' inf', end="")
-            if (branch[i][j] == 0 ):
-                ming=100000
+            if (branch[i][j] == 0):
+                ming = 100000
                 for i1 in range(len(branch)):
                     if (branch[i][i1] < ming):
                         if i1 != j:
@@ -301,84 +312,95 @@ def branch_and_bound():
                     maxpj = j
                     max = nul
                 nul = math.trunc(nul)
-                print('(',nul,' ',ming,' ',minv,')', end="")
+                print('(', nul, ' ', ming, ' ', minv, ')', end="")
                 nul = 0
         print('\n')
     qq = math.trunc(max)
-    print('максимальное значение нулевой клетки = ',qq)
-    print('i = ',maxpi,',  j = ',maxpj)
+    print('максимальное значение нулевой клетки = ', qq)
+    print('i = ', maxpi, ',  j = ', maxpj)
 
     print('нередуцированная матрица')
     branch[maxpj][maxpi] = ' inf'
     print(branch)
-    print('длина изначальной матрицы', end = " ")
+    print('длина изначальной матрицы', end=" ")
     print(len(branch))
-    #редукция матрицы
-    branch = np.delete(branch, maxpj, axis = 1)
+    # редукция матрицы
+    branch = np.delete(branch, maxpj, axis=1)
     print('прередуцированная матрица')
     print(branch)
     print('\n')
     print('редуцированная матрица')
     print('\n')
-    branch = np.delete(branch, maxpi, axis = 0)
+    branch = np.delete(branch, maxpi, axis=0)
     print(branch)
-    print('длина редуцированной матрицы', end = " ")
+    print('длина редуцированной матрицы', end=" ")
     print(len(branch))
     minhor.clear()
     minver.clear()
 
     localbound_change = 0
-    #поиск минимума в редуциорованной матрице
-    #минимум строки
+    # поиск минимума в редуциорованной матрице
+    # минимум строки
     for i in range(len(branch)):
         for j in range(len(branch)):
-            print(' ',branch[i][j],end="")
-        minh=1000000
+            print(' ', branch[i][j], end="")
+        minh = 1000000
         for i1 in range(len(branch)):
             if (branch[i][i1] < minh):
                 minh = branch[i][i1]
         minhor.append(minh)
         localbound_change = localbound_change + minh
-        minh = math.trunc(minh)
+
         print(' |  min = ', minh, end="")
         print('\n')
+        for i1 in range(len(branch)):
+            branch[i][i1]=branch[i][i1]-minh
 
-    #минимум столбца
-    for i in range (len(branch)):
-        minv=1000000
-        for j in range (len(branch)):
+    print('полуУпрощенная матрица')
+    print(branch)
+
+
+
+    # минимум столбца
+    for i in range(len(branch)):
+        minv = 1000000
+        for j in range(len(branch)):
             if (branch[j][i] < minv):
                 minv = branch[j][i]
         minver.append(minv)
         localbound_change = localbound + minv
         q = (minv)
-        qq = math.trunc(q)
-        print(' ', qq, end="")
+        print(' ', q, end="")
     print('\n')
 
-    print('локальная нижняя граница для первой ветви - не включения')
+    print('Упрощенная матрица')
+    for i in range(len(branch)):
+        for j in range(len(branch)):
+            branch[j][i] = branch[j][i] - minver[i]
+    print(branch)
+
+
+    print('локальная нижняя граница для ветви - включения')
     qq = math.trunc(localbound_change)
     print(qq)
-    print('локальная нижняя граница для второй ветви - включения')
+    print('локальная нижняя граница для ветви - не включения')
     localbound_not_change = localbound + max
     qq = math.trunc(localbound_not_change)
     print(qq)
 
     branch_change = branch.copy()
 
+    # до этого было корневое решение. Теперь будет огромный цикл решения дальнейшего. как говорил кизару - это п..ц
 
-
-
-    #до этого было корневое решение. Теперь будет огромный цикл решения дальнейшего. как говорил кизару - это п..ц
     print('начало циклического решения')
     flag = 0
     while (True):
         if flag == 1:
             break
-        print(branch_not_change,'\n')
-        print('(not change) cost = ',localbound_not_change,'\n')
-        print(branch_change,'\n')
-        print('(change) cost = ',localbound_change,'\n')
+        print(branch_not_change, '\n')
+        print('(not change) cost = ', localbound_not_change, '\n')
+        print(branch_change, '\n')
+        print('(change) cost = ', localbound_change, '\n')
 
         if localbound_change < localbound_not_change:
             # поиск нулевых клеток
@@ -418,7 +440,7 @@ def branch_and_bound():
             print('максимальное значение нулевой клетки = ', qq)
             print('i = ', maxpi, ',  j = ', maxpj)
             minchange = localbound_change + qq
-            print('не включение ',minchange)
+            print('не включение ', minchange)
 
             print('нередуцированная матрица')
             branch[maxpj][maxpi] = ' inf'
@@ -453,6 +475,11 @@ def branch_and_bound():
 
                 print(' |  min = ', minh, end="")
                 print('\n')
+                for i1 in range(len(branch)):
+                    branch[i][i1] = branch[i][i1] - minh
+
+            print('полуУпрощенная матрица')
+            print(branch)
 
             # минимум столбца
             for i in range(len(branch)):
@@ -461,21 +488,27 @@ def branch_and_bound():
                     if (branch[j][i] < minv):
                         minv = branch[j][i]
                 minver.append(minv)
-                localbound_change = localbound_change + minv
-                qq = (minv)
-
-                print(' ', qq, end="")
+                localbound_change = localbound + minv
+                q = (minv)
+                print(' ', q, end="")
             print('\n')
+
+            print('Упрощенная матрица')
+            for i in range(len(branch)):
+                for j in range(len(branch)):
+                    branch[j][i] = branch[j][i] - minver[i]
+            print(branch)
+
             print(localbound_change)
+            print(minchange)
 
             if localbound_change < minchange:
                 minchange = localbound_change
             print('минимум в изменении = ', minchange)
 
-            
+
 
         flag = 1
-
 
 
 def enter_koordinat():
@@ -501,7 +534,6 @@ def enter_koordinat():
 
     y = Entry(children)
 
-
     y.pack()
     btn1 = Button(children, text="Принять", command=teget).place(x=95, y=110)
     btn2 = Button(children, text="Закрыть", command=children.destroy).place(x=180, y=130)
@@ -515,24 +547,24 @@ canv = Canvas(root, width=1000, height=1000, bg="white")  # создаем ос�
 canv.create_line(500, 1000, 500, 0, width=2, arrow=LAST)
 canv.create_line(0, 400, 1000, 400, width=2, arrow=LAST)
 
+# canv.create_line(z_koor[0] + 0.5, w_koor[0] - 0.5, z_koor[1] + 0.5, w_koor[1] - 0.5)
 
-#canv.create_line(z_koor[0] + 0.5, w_koor[0] - 0.5, z_koor[1] + 0.5, w_koor[1] - 0.5)
+# Параметрами метода create_line() являются координаты x и y, которые обозначают стартовые и конечные точки линии.
 
- # Параметрами метода create_line() являются координаты x и y, которые обозначают стартовые и конечные точки линии.
-
-btn1 = Button(root, text="Ввод координат", font='Times 12',width=20,height=2, command=enter_koordinat)
+btn1 = Button(root, text="Ввод координат", font='Times 12', width=20, height=2, command=enter_koordinat)
 btn1.pack()
-btn_enter = Button(root, text="Загрузка из excel", font='Times 12',width=20,height=2, command=csv_read)
+btn_enter = Button(root, text="Загрузка из excel", font='Times 12', width=20, height=2, command=csv_read)
 btn_enter.pack()
-btn_clear = Button(root, text="Очистить поле", font='Times 15', height=2,width=15, command=deleting).place(x=20, y=480)
+btn_clear = Button(root, text="Очистить поле", font='Times 15', height=2, width=15, command=deleting).place(x=20, y=480)
 
-btn_line = Button(root, text="Линейное соединение массива", font='Times 13',height=2,width=25, command=lining).place(x=20, y=130)
+btn_line = Button(root, text="Линейное соединение массива", font='Times 13', height=2, width=25, command=lining).place(
+    x=20, y=130)
 
-btn_nightboard = Button(root, text="Метод ближайшего соседа", font='Times 13',height=2,width=25, command = nearest).place(x=20, y=200)
+btn_nightboard = Button(root, text="Метод ближайшего соседа", font='Times 13', height=2, width=25,
+                        command=nearest).place(x=20, y=200)
 
-btn_branch = Button(root, text="Метод ветвей и границ", font='Times 13', height=2,width=25, command = branch_and_bound).place(x=20, y=270)
-
-
+btn_branch = Button(root, text="Метод ветвей и границ", font='Times 13', height=2, width=25,
+                    command=branch_and_bound).place(x=20, y=270)
 
 Label(root, text="x").place(x=5, y=10)
 x_label = Label(root)
@@ -549,28 +581,27 @@ z_label = Label(root)
 z_label.place(x=55, y=50)
 z_label.config(text="0")
 
-Label(root, text="Длина линейной связи:").place(x=5,y=620)
+Label(root, text="Длина линейной связи:").place(x=5, y=620)
 lenline_label = Label(root)
 lenline_label.place(x=215, y=620)
 lenline_label.config(text=" ")
 
-Label(root, text="Длина метода ветвей и границ:").place(x=5,y=600)
+Label(root, text="Длина метода ветвей и границ:").place(x=5, y=600)
 branchline_label = Label(root)
 branchline_label.place(x=215, y=600)
 branchline_label.config(text=" ")
 
-testline_label = Label(root,text="Длина метода ближайшего соседа: ").place(x=5,y=580)
+testline_label = Label(root, text="Длина метода ближайшего соседа: ").place(x=5, y=580)
 testline_label = Label(root)
 testline_label.place(x=215, y=580)
 testline_label.config(text=" ")
 
-Label(root,text="Количество элементов ").place(x=5,y=560)
+Label(root, text="Количество элементов ").place(x=5, y=560)
 line_label = Label(root)
 line_label.place(x=155, y=560)
 line_label.config(text="0")
 
-
-quitButton = Button(root, text="Закрыть окно", font='Times 13', height=2,width=15, command=quit)
+quitButton = Button(root, text="Закрыть окно", font='Times 13', height=2, width=15, command=quit)
 quitButton.place(x=1200, y=10)
 canv.pack()
 root.mainloop()
